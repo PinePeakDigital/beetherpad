@@ -1,0 +1,13 @@
+{
+    "parts": [
+        {
+            "name": "simple_urls",
+            "post": [
+                "ep_etherpad-lite/static"
+            ],
+            "hooks": {
+                "expressCreateServer": "ep_simple_urls/index:registerRoute"
+            }
+        }
+    ]
+}
