@@ -3,7 +3,8 @@
         {
             "name": "simple_urls",
             "hooks": {
-                "expressCreateServer": "ep_simple_urls/index:registerRoute"
+                "expressCreateServer": "ep_simple_urls/index:expressCreateServer",
+                "expressPreSession": "ep_simple_urls/index:expressPreSession"
             }
         }
     ]
