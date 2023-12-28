@@ -5,9 +5,6 @@
             "hooks": {
                 "expressCreateServer": "ep_simple_urls/hooks.server:expressCreateServer",
                 "expressPreSession": "ep_simple_urls/hooks.server:expressPreSession"
-            },
-            "client_hooks": {
-                "aceEditorCSS": "ep_simple_urls/static/js/aceEditorCSS"
             }
         }
     ]
