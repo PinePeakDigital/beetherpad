@@ -1,5 +1,8 @@
 {
   "padOptions": {
     "useMonospaceFont": true
+  },
+  "padShortcutEnabled": {
+    "cmd5": false
   }
 }
