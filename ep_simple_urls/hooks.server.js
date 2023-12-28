@@ -19,4 +19,12 @@ exports.expressPreSession = async (hookName, args) => {
   <p>(If you don't know how to create new pads, ask <a href="http://ai.eecs.umich.edu/people/dreeves">dreeves</a>.)</p>
     `);
   });
+
+  args.app.get('/admin/plugins', (req, res) => {
+    res.send('This server is not persistent. Update your settings in GitHub instead.');
+  });
+
+  args.app.get('/admin/settings', (req, res) => {
+    res.send('This server is not persistent. Update your settings in GitHub instead.');
+  });
 };
