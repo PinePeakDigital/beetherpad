@@ -4,5 +4,11 @@
   },
   "padShortcutEnabled": {
     "cmd5": false
+  },
+  "users": {
+    "admin": {
+      "password": "${ADMIN_PASSWORD:null}",
+      "is_admin": true
+    }
   }
 }
