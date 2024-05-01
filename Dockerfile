@@ -1,9 +1,9 @@
 
-FROM etherpad/etherpad:1.9.6
+FROM etherpad/etherpad:2.0.2
 
-WORKDIR /opt/etherpad-lite
+WORKDIR /opt/etherpad-lite/src
 
-RUN npm install \
+RUN pnpm install \
     ep_adminpads3 \
     ep_author_hover \
     ep_brightcolorpicker \
@@ -16,4 +16,4 @@ COPY robots.txt ./src/static/robots.txt
 COPY settings.json ./settings.json
 COPY ep_simple_urls /ep_simple_urls
 
-RUN npm install /ep_simple_urls
+RUN pnpm install /ep_simple_urls
