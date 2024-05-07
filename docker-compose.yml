@@ -12,6 +12,7 @@ services:
       - DB_USER=etherpad
       - DB_PASS=secretpassword
       - ADMIN_PASSWORD=secretpassword
+      - IMPORT_EXPORT_MAX_REQ_PER_IP=1000
     ports:
       - "9001:9001"
     depends_on:
