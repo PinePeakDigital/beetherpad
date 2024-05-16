@@ -2,7 +2,14 @@ version: "3"
 
 services:
   etherpad:
-    build: .
+    image: etherpad/etherpad:2.0.3
+    build:
+      # context: .
+      args:
+        # - ETHERPAD_PLUGINS="ep_adminpads3 ep_author_hover ep_brightcolorpicker ep_pad_activity_nofication_in_title ep_post_data ep_prompt_for_name ep_sync_status"
+        - ETHERPAD_PLUGINS="ep_author_hover"
+        # - ETHERPAD_LOCAL_PLUGINS="ep_simple_urls"
+        - SETTINGS=./settings.json
     restart: always
     environment:
       - DB_TYPE=postgres
