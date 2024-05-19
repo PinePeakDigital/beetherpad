@@ -37,6 +37,8 @@ for plugin in $ETHERPAD_LOCAL_PLUGINS; do
     etherpad_local_plugins_buildarg="$etherpad_local_plugins_buildarg ../src/local_plugins/$plugin"
 done
 
+cp "$PWD/settings.json" "$etherpad_path/settings.json.docker"
+
 # If you're running this script with sudo, you probably don't want to
 # leave root-owned files in your cache.
 chown -R "${SUDO_USER:-$USER}:" "$etherpad_path"
@@ -79,10 +81,6 @@ docker run \
        --env DB_NAME=etherpad \
        --env DB_USER=etherpad \
        --env DB_PASS=secretpassword \
-       --env ADMIN_PASSWORD=secretpassword \
-       --env IMPORT_EXPORT_MAX_REQ_PER_IP=1000 \
-       --env PAD_OPTIONS_USER_MONOSPACE_FONT=true \
-       --env PAD_SHORTCUTS_ENABLED_CMD_5=false \
        --network=beetherpad-network \
        --publish 9001:9001 \
        beetherpad
