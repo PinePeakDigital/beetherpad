@@ -23,6 +23,7 @@ if [ ! -d "$etherpad_path" ]
 else
     old_dir="$PWD"
     cd "$etherpad_path" || exit
+    git reset --hard HEAD
     git clean -xdf
     git pull 'https://github.com/ether/etherpad-lite.git'
     cd "$old_dir" || exit
