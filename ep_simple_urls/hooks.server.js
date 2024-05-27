@@ -22,9 +22,10 @@ exports.expressPreSession = async (hookName, args) => {
 };
 
 exports.socketio = (hookName, args, callback) => {
-  const io = args.io.of("/pluginfw/installer");
+  const settingIO = args.io.of("/settings");
+  const pluginIO = args.io.of("/pluginfw/installer");
 
-  io.on("connection", (socket) => {
+  pluginIO.on("connection", (socket) => {
     socket.removeAllListeners("getInstalled");
     socket.removeAllListeners("search");
     socket.removeAllListeners("getAvailable");
@@ -59,6 +60,23 @@ exports.socketio = (hookName, args, callback) => {
         plugin,
         error: "Plugin management is disabled",
       });
+    });
+  });
+
+  settingIO.on("connection", (socket) => {
+    socket.removeAllListeners("saveSettings");
+    socket.removeAllListeners("restartServer");
+
+    socket.on("saveSettings", async (newSettings) => {
+      console.log(
+        "Admin request to save settings through a socket on /admin/settings",
+      );
+    });
+
+    socket.on("restartServer", async () => {
+      console.log(
+        "Admin request to restart server through a socket on /admin/settings",
+      );
     });
   });
 
