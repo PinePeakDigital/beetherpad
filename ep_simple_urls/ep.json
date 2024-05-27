@@ -1,12 +1,12 @@
 {
-    "parts": [
-        {
-            "name": "simple_urls",
-            "hooks": {
-                "expressCreateServer": "ep_simple_urls/hooks.server:expressCreateServer",
-                "expressPreSession": "ep_simple_urls/hooks.server:expressPreSession",
-                "socketio": "ep_simple_urls/hooks.server:socketio"
-            }
-        }
-    ]
+  "parts": [
+    {
+      "name": "simple_urls",
+      "hooks": {
+        "expressCreateServer": "ep_simple_urls/hooks.server:expressCreateServer",
+        "expressPreSession": "ep_simple_urls/hooks.server:expressPreSession",
+        "socketio": "ep_simple_urls/hooks.server:socketio"
+      }
+    }
+  ]
 }

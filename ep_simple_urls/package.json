@@ -1,33 +1,33 @@
 {
-    "name": "ep_simple_urls",
-    "description": "Make URLs simpler",
-    "version": "0.0.0",
-    "author": "Nathan Arthur",
-    "repository": "git@github.com:beeminder/beetherpad.git",
-    "contributors": [
-        {
-            "name": "Nathan Arthur",
-            "email": "nathan@nathanarthur.com",
-            "url": "https://nathanarthour.com"
-        }
-    ],
-    "engines": {
-        "node": ">=12.17.0"
-    },
-    "funding": {
-        "type": "individual",
-        "url": "https://etherpad.org/"
-    },
-    "devDependencies": {
-        "eslint": "^8.11.0",
-        "eslint-config-etherpad": "^3.0.9",
-        "typescript": "^4.6.2"
-    },
-    "scripts": {
-        "lint": "eslint .",
-        "lint:fix": "eslint --fix ."
-    },
-    "peerDependencies": {
-        "ep_etherpad-lite": ">=1.8.6"
+  "name": "ep_simple_urls",
+  "description": "Make URLs simpler",
+  "version": "0.0.0",
+  "author": "Nathan Arthur",
+  "repository": "git@github.com:beeminder/beetherpad.git",
+  "contributors": [
+    {
+      "name": "Nathan Arthur",
+      "email": "nathan@nathanarthur.com",
+      "url": "https://nathanarthour.com"
     }
+  ],
+  "engines": {
+    "node": ">=12.17.0"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://etherpad.org/"
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-etherpad": "^3.0.9",
+    "typescript": "^4.6.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "peerDependencies": {
+    "ep_etherpad-lite": ">=1.8.6"
+  }
 }
