@@ -1,5 +1,8 @@
 "use strict";
 
+const API = require("ep_etherpad-lite/node/db/API");
+const { parseMarkdown } = require("expost");
+
 exports.expressCreateServer = (hookName, args, callback) => {
   args.app.use((req, res, next) => {
     const isAdmin = req.url.startsWith("/admin/") || req.url === "/admin";
@@ -18,6 +21,17 @@ exports.expressPreSession = async (hookName, args) => {
   <h1>DtherPad: dreeves's EtherPad <br> Also known as hippo.padm.us</h1>
   <p>(If you don't know how to create new pads, ask <a href="http://ai.eecs.umich.edu/people/dreeves">dreeves</a>.)</p>
     `);
+  });
+
+  args.app.get("/p/:pad", (req, res, next) => {
+    const { pad } = req.params;
+
+    API.getText(pad)
+      .then(({ text }) => res.send(parseMarkdown(text)))
+      .catch((err) => {
+        console.error(`Error in markdown parsing for ${pad}:`, err);
+        res.send("Oops, something went wrong!");
+      });
   });
 };
 
