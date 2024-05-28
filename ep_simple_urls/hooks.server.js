@@ -1,7 +1,8 @@
 "use strict";
 
 const API = require("ep_etherpad-lite/node/db/API");
-const { parseMarkdown } = require("expost");
+const expost = require("expost");
+const eejs = require("ep_etherpad-lite/node/eejs");
 
 exports.expressCreateServer = (hookName, args, callback) => {
   args.app.use((req, res, next) => {
@@ -27,7 +28,16 @@ exports.expressPreSession = async (hookName, args) => {
     const { pad } = req.params;
 
     API.getText(pad)
-      .then(({ text }) => res.send(parseMarkdown(text)))
+      .then(({ text }) => {
+        const body = expost.parseMarkdown(text);
+        const title = expost.parseTitle(text);
+        res.send(
+          eejs.require("ep_simple_urls/templates/pad.html", {
+            title,
+            body,
+          }),
+        );
+      })
       .catch((err) => {
         console.error(`Error in markdown parsing for ${pad}:`, err);
         res.send("Oops, something went wrong!");
