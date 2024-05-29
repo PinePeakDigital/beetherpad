@@ -4,6 +4,8 @@ const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
 
+const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
+
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", (req, res) => {
     res.send(`
@@ -28,21 +30,25 @@ exports.expressPreSession = async (hookName, args) => {
   args.app.get("/p/:pad", (req, res, next) => {
     const { pad } = req.params;
 
-    API.getText(pad)
-      .then(({ text }) => {
-        const body = expost.parseMarkdown(text);
-        const title = expost.parseTitle(text);
-        res.send(
-          eejs.require("ep_simple_urls/templates/pad.html", {
-            title,
-            body,
-          }),
-        );
-      })
-      .catch((err) => {
-        console.error(`Error in markdown parsing for ${pad}:`, err);
-        res.send("Oops, something went wrong!");
-      });
+    if (req.hostname === secretDomain) {
+      next();
+    } else {
+      API.getText(pad)
+        .then(({ text }) => {
+          const body = expost.parseMarkdown(text);
+          const title = expost.parseTitle(text);
+          res.send(
+            eejs.require("ep_simple_urls/templates/pad.html", {
+              title,
+              body,
+            }),
+          );
+        })
+        .catch((err) => {
+          console.error(`Error in markdown parsing for ${pad}:`, err);
+          res.send("Oops, something went wrong!");
+        });
+    }
   });
 };
 
