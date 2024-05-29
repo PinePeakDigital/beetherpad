@@ -4,24 +4,25 @@ const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
 
-exports.expressCreateServer = (hookName, args, callback) => {
-  args.app.use((req, res, next) => {
-    const isAdmin = req.url.startsWith("/admin/") || req.url === "/admin";
-    if (!req.url.startsWith("/p/") && !isAdmin) {
-      req.url = `/p${req.url}`;
-    }
-    next();
-  });
-
-  callback();
-};
-
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", (req, res) => {
     res.send(`
   <h1>DtherPad: dreeves's EtherPad <br> Also known as hippo.padm.us</h1>
   <p>(If you don't know how to create new pads, ask <a href="http://ai.eecs.umich.edu/people/dreeves">dreeves</a>.)</p>
     `);
+  });
+
+  args.app.use((req, res, next) => {
+    // We don't want to redirect any of the static pad resources
+    // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
+    // but not "/foo/bar" or "/foo.bar".
+    const postPathRegexp = /^[/][^/.]+[/]?$/;
+    const isAdmin = req.url.startsWith("/admin/") || req.url === "/admin";
+    const isPost = postPathRegexp.test(req.url);
+    if (isPost && !req.url.startsWith("/p/") && !isAdmin) {
+      req.url = `/p${req.url}`;
+    }
+    next();
   });
 
   args.app.get("/p/:pad", (req, res, next) => {
