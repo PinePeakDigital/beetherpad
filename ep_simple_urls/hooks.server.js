@@ -53,8 +53,16 @@ exports.expressPreSession = async (hookName, args) => {
 };
 
 exports.socketio = (hookName, args, callback) => {
-  const settingIO = args.io.of("/settings");
-  const pluginIO = args.io.of("/pluginfw/installer");
+  const io = args.io;
+  const settingIO = io.of("/settings");
+  const pluginIO = io.of("/pluginfw/installer");
+
+  io.on("connection", (socket) => {
+    if (!socket.handshake.headers.host.startsWith(secretDomain)) {
+      console.log("Unauthorized websocket connection disconnected");
+      return socket.disconnect();
+    }
+  });
 
   pluginIO.on("connection", (socket) => {
     socket.removeAllListeners("getInstalled");
