@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "types": ["vitest/importMeta"],
+    "lib": ["ES2021"]
+  }
+  // other settings...
+}

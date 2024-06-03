@@ -1,0 +1,23 @@
+{
+  "name": "beetherpad",
+  "version": "1.0.0",
+  "description": "```bash docker-compose build docker-compose up open http://localhost:9001 ```",
+  "main": "index.js",
+  "scripts": {
+    "puppeteer": "npx tsx ./scripts/puppeteer.ts",
+    "test": "vitest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pixelmatch": "^5.3.0",
+    "puppeteer": "^22.10.0",
+    "sharp": "^0.33.4",
+    "vitest": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
+    "tsx": "^4.11.2"
+  }
+}
