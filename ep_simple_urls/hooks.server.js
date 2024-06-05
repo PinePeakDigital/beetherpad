@@ -1,16 +1,10 @@
 "use strict";
 
-exports.expressCreateServer = (hookName, args, callback) => {
-  args.app.use((req, res, next) => {
-    const isAdmin = req.url.startsWith("/admin/") || req.url === "/admin";
-    if (!req.url.startsWith("/p/") && !isAdmin) {
-      req.url = `/p${req.url}`;
-    }
-    next();
-  });
+const API = require("ep_etherpad-lite/node/db/API");
+const expost = require("expost");
+const eejs = require("ep_etherpad-lite/node/eejs");
 
-  callback();
-};
+const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", (req, res) => {
@@ -19,11 +13,58 @@ exports.expressPreSession = async (hookName, args) => {
   <p>(If you don't know how to create new pads, ask <a href="http://ai.eecs.umich.edu/people/dreeves">dreeves</a>.)</p>
     `);
   });
+
+  args.app.use((req, res, next) => {
+    // We don't want to redirect any of the static pad resources
+    // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
+    // but not "/foo/bar" or "/foo.bar".
+    const postPathRegexp = /^[/][^/.]+[/]?$/;
+    const postAdminRegexp = /^[/](admin|admin-auth|health)[/]?$/;
+
+    const isPost = postPathRegexp.test(req.url);
+    const isAdmin = postAdminRegexp.test(req.url);
+    if (isPost && !req.url.startsWith("/p/") && !isAdmin) {
+      req.url = `/p${req.url}`;
+    }
+    next();
+  });
+
+  args.app.get("/p/:pad", (req, res, next) => {
+    const { pad } = req.params;
+
+    if (req.hostname === secretDomain) {
+      next();
+    } else {
+      API.getText(pad)
+        .then(({ text }) => {
+          const body = expost.parseMarkdown(text);
+          const title = expost.parseTitle(text);
+          res.send(
+            eejs.require("ep_simple_urls/templates/pad.html", {
+              title,
+              body,
+            }),
+          );
+        })
+        .catch((err) => {
+          console.error(`Error in markdown parsing for ${pad}:`, err);
+          res.send("Oops, something went wrong!");
+        });
+    }
+  });
 };
 
 exports.socketio = (hookName, args, callback) => {
-  const settingIO = args.io.of("/settings");
-  const pluginIO = args.io.of("/pluginfw/installer");
+  const io = args.io;
+  const settingIO = io.of("/settings");
+  const pluginIO = io.of("/pluginfw/installer");
+
+  io.on("connection", (socket) => {
+    if (!socket.handshake.headers.host.startsWith(secretDomain)) {
+      console.log("Unauthorized websocket connection disconnected");
+      return socket.disconnect();
+    }
+  });
 
   pluginIO.on("connection", (socket) => {
     socket.removeAllListeners("getInstalled");
