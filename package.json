@@ -9,15 +9,10 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "pixelmatch": "^5.3.0",
-    "puppeteer": "^22.10.0",
-    "sharp": "^0.33.4",
-    "vitest": "^1.6.0"
-  },
   "devDependencies": {
-    "@types/pixelmatch": "^5.2.6",
-    "@types/pngjs": "^6.0.5",
-    "tsx": "^4.11.2"
+    "vitest": "^1.6.0",
+    "tsx": "^4.11.2",
+    "pixelteer": "github:narthur/pixelteer",
+    "puppeteer": "22.6.5"
   }
 }

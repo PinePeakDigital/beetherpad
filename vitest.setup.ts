@@ -1,14 +1,7 @@
 import { beforeEach, vi } from "vitest";
-import getSitemap from "./src/lib/getSitemap";
-import readScreenshot from "./src/lib/readScreenshot";
+import getPaths from "./scripts/puppeteer/getPaths";
 
-vi.mock("./src/lib/fetchPost");
-vi.mock("./src/lib/readSources");
-vi.mock("./src/lib/test/createReport");
-vi.mock("./src/lib/test/saveScreenshot");
-vi.mock("./src/lib/test/getSitemap");
-vi.mock("./src/lib/test/readScreenshot");
-vi.mock("./src/lib/test/resizeImage");
+vi.mock("./scripts/puppeteer/getPaths");
 vi.mock("node-fetch-cache");
 vi.mock("puppeteer", () => ({
   default: {
@@ -30,6 +23,7 @@ vi.mock("astro", () => ({
   })),
 }));
 vi.mock("pixelmatch");
+vi.mock("pixelteer");
 vi.mock("pngjs");
 vi.mock("sharp");
 
@@ -42,13 +36,7 @@ beforeEach(() => {
     Promise.resolve({ text: vi.fn(async () => "") } as any)
   );
 
-  vi.mocked(getSitemap).mockResolvedValue([]);
-  vi.mocked(readScreenshot).mockReturnValue({
-    metadata: () => ({
-      width: 100,
-      height: 100,
-    }),
-  } as any);
+  vi.mocked(getPaths).mockResolvedValue([]);
 
   vi.stubGlobal("console", {
     ...console,
