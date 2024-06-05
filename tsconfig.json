@@ -7,5 +7,4 @@
     "types": ["vitest/importMeta"],
     "lib": ["ES2021"]
   }
-  // other settings...
 }
