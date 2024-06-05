@@ -1,6 +1,6 @@
 #!/bin/sh
 
-user_home=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
+user_home=${HOME}
 CACHE_DIR=${CACHE_DIR:=$user_home/.cache}
 DEV_ENV=${DEV_ENV:-false}
 
