@@ -37,12 +37,17 @@ exports.expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
-    const { target, statusCode } = getMatchingDomain(req.url);
-    if (target) {
-      res.redirect(statusCode, target);
-    } else {
-      next();
+    if (req.url === "/post" && req.hostname !== secretDomain) {
+      return res.status(401).send("Unauthorized");
     }
+
+    const { target, statusCode } = getMatchingDomain(req.url);
+      
+    if (target) {
+      return res.redirect(statusCode, target);
+    }
+      
+    next();
   });
 
   args.app.use((req, res, next) => {
@@ -50,7 +55,7 @@ exports.expressPreSession = async (hookName, args) => {
     // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
     // but not "/foo/bar" or "/foo.bar".
     const postPathRegexp = /^[/][^/.]+[/]?$/;
-    const postAdminRegexp = /^[/](admin|admin-auth|health)[/]?$/;
+    const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
 
     const isPost = postPathRegexp.test(req.url);
     const isAdmin = postAdminRegexp.test(req.url);
