@@ -47,10 +47,19 @@ done
 
 cp "$PWD/settings.json" "$etherpad_path/settings.json.docker"
 
-docker build -t beetherpad \
-	--build-arg=ETHERPAD_PLUGINS="$ETHERPAD_PLUGINS" \
-	--build-arg=ETHERPAD_LOCAL_PLUGINS="$etherpad_local_plugins_buildarg" \
-	"$etherpad_path"
+docker_build() {
+    if [ "$DEV_ENV" = "true" ]; then
+        set -- --build-arg=EP_UID=0
+    fi
+
+    docker build -t beetherpad \
+	       --build-arg=ETHERPAD_PLUGINS="$ETHERPAD_PLUGINS" \
+	       --build-arg=ETHERPAD_LOCAL_PLUGINS="$etherpad_local_plugins_buildarg" \
+           "$@" \
+	       "$etherpad_path"
+}
+
+docker_build
 
 if [ "$DEV_ENV" = "true" ]; then
 	# Environment Setup
