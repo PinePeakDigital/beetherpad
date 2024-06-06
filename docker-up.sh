@@ -89,7 +89,7 @@ docker_run() {
 	docker container rm beetherpad
 
 	if [ "$DEV_ENV" = "true" ]; then
-		set -- --network=beetherpad-network "$@"
+		set -- --network=beetherpad-network
 		for plugin in $ETHERPAD_LOCAL_PLUGINS; do
 			set -- --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" "$@"
 		done
@@ -106,7 +106,8 @@ docker_run() {
 		--env DB_PASS="${DB_PASS:-secretpassword}" \
         --env ETHERPAD_SECRET_DOMAIN="${ETHERPAD_SECRET_DOMAIN}" \
 		--publish 9001:9001 \
-		"$@"
+		"$@" \
+        beetherpad
 }
 
-docker_run beetherpad
+docker_run
