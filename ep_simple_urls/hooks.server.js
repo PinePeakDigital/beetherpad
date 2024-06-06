@@ -37,13 +37,13 @@ exports.expressPreSession = async (hookName, args) => {
     } else {
       API.getText(pad)
         .then(({ text }) => {
-          const body = expost.parseMarkdown(text);
+          const body = expost.parseMarkdown(text, { strict: false });
           const title = expost.parseTitle(text);
           res.send(
             eejs.require("ep_simple_urls/templates/pad.html", {
               title,
               body,
-            }),
+            })
           );
         })
         .catch((err) => {
@@ -110,13 +110,13 @@ exports.socketio = (hookName, args, callback) => {
 
     socket.on("saveSettings", async (newSettings) => {
       console.log(
-        "Admin request to save settings through a socket on /admin/settings",
+        "Admin request to save settings through a socket on /admin/settings"
       );
     });
 
     socket.on("restartServer", async () => {
       console.log(
-        "Admin request to restart server through a socket on /admin/settings",
+        "Admin request to restart server through a socket on /admin/settings"
       );
     });
   });

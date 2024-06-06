@@ -28,7 +28,9 @@ export async function run(argv: string[] = []) {
       console.error(error);
     },
   });
+}
 
+function report() {
   createReport({
     outDir,
     baseUrl1: base,
@@ -36,5 +38,27 @@ export async function run(argv: string[] = []) {
     shotsDir: outDir,
   });
 }
+
+process.on("exit", (code) => {
+  console.log("About to exit with code:", code);
+  report();
+});
+
+function cleenUp() {
+  console.log("Received SIGINT.  Do any cleanup here before process exit");
+  report();
+  process.exit();
+}
+
+process.on("SIGINT", () => {
+  console.log("Received SIGINT.  Do any cleanup here before process exit");
+  cleenUp();
+});
+
+process.on("uncaughtException", function (err) {
+  console.log("Caught exception: ", err);
+  report();
+  process.exit();
+});
 
 run(process.argv);
