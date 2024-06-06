@@ -19,7 +19,7 @@ exports.expressPreSession = async (hookName, args) => {
     // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
     // but not "/foo/bar" or "/foo.bar".
     const postPathRegexp = /^[/][^/.]+[/]?$/;
-    const postAdminRegexp = /^[/](admin|admin-auth|health)[/]?$/;
+    const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
 
     const isPost = postPathRegexp.test(req.url);
     const isAdmin = postAdminRegexp.test(req.url);
