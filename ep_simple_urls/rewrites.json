@@ -1,0 +1,442 @@
+[
+  {
+    "regex": "^/lowjargonbaremin(/.*)?$",
+    "replace": "/safesum$1",
+    "permanent": true
+  },
+
+  {
+    "regex": "^/gtbee2(/.*)?$",
+    "replace": "/gtbeedroid$1",
+    "permanent": true
+  },
+
+  {
+    "regex": "^/msrnyc_w*(/.*)?$",
+    "replace": "/msrnyc$1",
+    "permanent": true
+  },
+
+  {
+    "regex": "^/words(/.*)?$",
+    "replace": "/dicked$1",
+    "last": true
+  },
+  {
+    "regex": "^/.*.html$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/w$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*wordpress.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/wp.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/old[w-]*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/new.?site(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/new(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/rss(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/sit[eio]o?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/sitemap(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/201[^1](/.*)?$",
+    "replace": "/api/404",
+    "case": true
+  },
+  {
+    "regex": "^/20[^1].*(/.*)?$",
+    "replace": "/api/404",
+    "case": true
+  },
+  {
+    "regex": "^/bkp?d*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/homes?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/main(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/dev(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/cms(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/portal(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/web2?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/website(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/temp(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/demos?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/archive(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/vd+(/.*)?$",
+    "replace": "/api/404",
+    "case": true
+  },
+  {
+    "regex": "^/assets(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/public_html(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/staging(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/schema(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/ba[ck](/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/xx+ss+w*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/adm(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/admin[^a/]w+(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/w+admin(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/phpw+(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/null(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/apple-ap[w-]*(/.*)?$",
+    "replace": "/api/404",
+    "case": true
+  },
+  {
+    "regex": "^/pma(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*sql.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/images(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/blog[^o](/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/_.*(/.*)?$",
+    "replace": "/api/404",
+    "case": true
+  },
+  {
+    "regex": "^/mybackup(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/blogbackup(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/B[aA][cC][kK][uU][pP](/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/develop(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/id_w*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/w*user(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/magento_w+(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/w*editor(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*manager.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/install.*(/.*)$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/REDACTED(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*login.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/db(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/database(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/w*-json(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/bXNw+(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/yl-d(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/RPC2(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/feeds?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/search(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*.php(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*test.*404.*$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*404.*test.*$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/T[eE][sS][tT](/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/test(ing|s)(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/issmall(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/contact(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/[^lp](/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/www(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*alfa.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/mt(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/shop(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/store(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/docs?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/forum(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/error.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/blog(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/about(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*server.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/magic(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/mored*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/files?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/img(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/pdf(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/apps?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/swagger.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/upload.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*status(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/adad.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/send_.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*config.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/cgi.bin.*(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/core(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/includes?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/plugins?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/components?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/system(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/.*Public.*$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/templates?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/local(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/vendors?(/.*)?$",
+    "replace": "/api/404"
+  },
+  {
+    "regex": "^/typo.*$",
+    "replace": "/api/404"
+  }
+]

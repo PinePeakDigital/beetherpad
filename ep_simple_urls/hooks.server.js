@@ -3,8 +3,30 @@
 const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
+const rewrites = require("./rewrites.json");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
+
+function getMatchingDomain(url) {
+  let target;
+  let statusCode = 301;
+
+  for (let rewrite of rewrites) {
+    if (url.match(rewrite.regex)) {
+      target = rewrite.replace;
+
+      if (rewrite.permanent) {
+        statusCode = 302;
+      }
+
+      if (rewrite.last) {
+        break;
+      }
+    }
+  }
+
+  return { target, statusCode };
+}
 
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", (req, res) => {
@@ -16,10 +38,16 @@ exports.expressPreSession = async (hookName, args) => {
 
   args.app.use((req, res, next) => {
     if (req.url === "/post" && req.hostname !== secretDomain) {
-      res.status(401).send("Unauthorized");
-    } else {
-      next();
+      return res.status(401).send("Unauthorized");
     }
+
+    const { target, statusCode } = getMatchingDomain(req.url);
+      
+    if (target) {
+      return res.redirect(statusCode, target);
+    }
+      
+    next();
   });
 
   args.app.use((req, res, next) => {
@@ -59,6 +87,10 @@ exports.expressPreSession = async (hookName, args) => {
           res.send("Oops, something went wrong!");
         });
     }
+  });
+
+  args.app.get("/api/404", (req, res) => {
+    res.send("<h1>404 Not Found</h1>");
   });
 };
 
