@@ -65,27 +65,28 @@ exports.expressPreSession = async (hookName, args) => {
     next();
   });
 
-  args.app.get("/p/:pad", (req, res, next) => {
+  args.app.get("/p/:pad", async (req, res, next) => {
     const { pad } = req.params;
 
     if (req.hostname === secretDomain) {
       next();
     } else {
-      API.getText(pad)
-        .then(({ text }) => {
-          const body = expost.parseMarkdown(text);
-          const title = expost.parseTitle(text);
-          res.send(
-            eejs.require("ep_simple_urls/templates/pad.html", {
-              title,
-              body,
-            }),
-          );
-        })
-        .catch((err) => {
-          console.error(`Error in markdown parsing for ${pad}:`, err);
-          res.send("Oops, something went wrong!");
-        });
+      const { text } = await API.getText(pad);
+
+      try {
+        const body = await expost.parseMarkdown(text);
+        const title = expost.parseTitle(text);
+
+        res.send(
+          eejs.require("ep_simple_urls/templates/pad.html", {
+            title,
+            body,
+          }),
+        );
+      } catch (err) {
+        console.error(`Error in markdown parsing for ${pad}:`, err);
+        res.send("Oops, something went wrong!");
+      }
     }
   });
 
