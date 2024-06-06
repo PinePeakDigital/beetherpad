@@ -15,6 +15,14 @@ exports.expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
+    if (req.url === "/post" && req.hostname !== secretDomain) {
+      res.status(401).send("Unauthorized");
+    } else {
+      next();
+    }
+  });
+
+  args.app.use((req, res, next) => {
     // We don't want to redirect any of the static pad resources
     // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
     // but not "/foo/bar" or "/foo.bar".
