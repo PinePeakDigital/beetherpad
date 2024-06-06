@@ -1,7 +1,9 @@
 #!/bin/sh
 
-user_home=${HOME}
-CACHE_DIR=${CACHE_DIR:=$user_home/.cache}
+CACHE_DIR=${CACHE_DIR:=$HOME/.cache}
+if [ "$(uname)" = "Darwin" ]; then
+    CACHE_DIR=${CACHE_DIR:=$HOME/Library/Caches}
+fi
 DEV_ENV=${DEV_ENV:-false}
 
 if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
@@ -44,10 +46,6 @@ for plugin in $ETHERPAD_LOCAL_PLUGINS; do
 done
 
 cp "$PWD/settings.json" "$etherpad_path/settings.json.docker"
-
-# If you're running this script with sudo, you probably don't want to
-# leave root-owned files in your cache.
-chown -R "${SUDO_USER:-$USER}:" "$etherpad_path"
 
 docker build -t beetherpad \
 	--build-arg=ETHERPAD_PLUGINS="$ETHERPAD_PLUGINS" \
