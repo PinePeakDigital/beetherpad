@@ -32,7 +32,8 @@ else
     cd "$etherpad_path" || exit
     git reset --hard HEAD
     git clean -xdf
-    git pull 'https://github.com/ether/etherpad-lite.git'
+    git fetch origin "$ETHERPAD_VERSION"
+    git checkout "$ETHERPAD_VERSION"
     cd "$old_dir" || exit
 fi
 
