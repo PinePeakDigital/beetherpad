@@ -10,6 +10,12 @@ if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
     echo "Secret domain isn't set! Set ETHERPAD_SECRET_DOMAIN."
     exit 1
 fi
+
+if [ -z "${ETHERPAD_PUBLIC_DOMAIN}" ]; then
+    echo "Secret domain isn't set! Set ETHERPAD_PUBLIC_DOMAIN."
+    exit 1
+fi
+
 ETHERPAD_VERSION='2.0.3'
 ETHERPAD_PLUGINS="\
 ep_adminpads3 \
@@ -106,6 +112,7 @@ docker_run() {
         --env DB_USER="${DB_USER:-etherpad}" \
         --env DB_PASS="${DB_PASS:-secretpassword}" \
         --env ETHERPAD_SECRET_DOMAIN="${ETHERPAD_SECRET_DOMAIN}" \
+        --env ETHERPAD_PUBLIC_DOMAIN="${ETHERPAD_PUBLIC_DOMAIN}" \
         --publish 9001:9001 \
         "$@" \
         beetherpad
