@@ -18,5 +18,5 @@ psql -q etherpad <<'SQL'
     count(1) as qty
     from store
     GROUP BY padname
-    ORDER BY qty DESC;
+    ORDER BY padname DESC;
 SQL
