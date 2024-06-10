@@ -56,10 +56,12 @@ exports.expressPreSession = async (hookName, args) => {
     // but not "/foo/bar" or "/foo.bar".
     const postPathRegexp = /^[/][^/.]+[/]?$/;
     const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
+    const operationPathRegexp = /^[/][^/.]+[/]?\/(export|timeslider)\/?[^/]*/;
 
     const isPost = postPathRegexp.test(req.url);
     const isAdmin = postAdminRegexp.test(req.url);
-    if (isPost && !req.url.startsWith("/p/") && !isAdmin) {
+    const isOp = operationPathRegexp.test(req.url);
+    if ((isPost || isOp) && !req.url.startsWith("/p/") && !isAdmin) {
       req.url = `/p${req.url}`;
     }
     next();
