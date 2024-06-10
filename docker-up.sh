@@ -18,9 +18,7 @@ fi
 
 ETHERPAD_VERSION='2.0.3'
 ETHERPAD_PLUGINS="\
-ep_adminpads3 \
 ep_author_hover \
-ep_brightcolorpicker \
 ep_pad_activity_nofication_in_title \
 ep_prompt_for_name \
 ep_sync_status"
