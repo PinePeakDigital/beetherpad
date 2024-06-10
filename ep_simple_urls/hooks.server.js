@@ -73,7 +73,15 @@ exports.expressPreSession = async (hookName, args) => {
     if (req.hostname === secretDomain) {
       next();
     } else {
-      const { text } = await API.getText(pad);
+      let text;
+
+      try {
+        const result = await API.getText(pad);
+        text = result.text;
+      } catch (err) {
+        console.log(`Failed to fetch pad ${pad}:`, err);
+        res.status(404).send("<h1>404 Not Found</h1>");
+      }
 
       try {
         const body = await expost.parseMarkdown(text);
