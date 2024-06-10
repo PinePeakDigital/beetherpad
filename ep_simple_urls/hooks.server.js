@@ -31,9 +31,37 @@ function getMatchingDomain(url) {
   return { target, statusCode };
 }
 
+async function renderPad(pad) {
+  let text;
+  const result = await API.getText(pad);
+  text = result.text;
+
+  const body = await expost.parseMarkdown(text, { strict: false });
+  const title = expost.parseTitle(text);
+
+  return eejs.require("ep_simple_urls/templates/pad.html", {
+    title,
+    body,
+  });
+}
+
 exports.expressPreSession = async (hookName, args) => {
-  args.app.get("/", (req, res) => {
-    return res.redirect(302, "/public");
+  args.app.get("/", async (req, res) => {
+    let padName;
+
+    if (req.hostname === secretDomain) {
+      padName = "public";
+    } else {
+      padName = "expost";
+    }
+
+    try {
+      const renderedPad = await renderPad(padName);
+      return res.send(renderedPad);
+    } catch (err) {
+      console.error(`Failed to render pad ${padName}:`, err);
+      return res.status(404).send("<h1>404 Not Found</h1>");
+    }
   });
 
   args.app.use((req, res, next) => {
@@ -73,29 +101,12 @@ exports.expressPreSession = async (hookName, args) => {
     if (req.hostname === secretDomain) {
       next();
     } else {
-      let text;
-
       try {
-        const result = await API.getText(pad);
-        text = result.text;
+        const renderedPad = await renderPad(pad);
+        return res.send(renderedPad);
       } catch (err) {
-        console.log(`Failed to fetch pad ${pad}:`, err);
-        res.status(404).send("<h1>404 Not Found</h1>");
-      }
-
-      try {
-        const body = await expost.parseMarkdown(text);
-        const title = expost.parseTitle(text);
-
-        res.send(
-          eejs.require("ep_simple_urls/templates/pad.html", {
-            title,
-            body,
-          }),
-        );
-      } catch (err) {
-        console.error(`Error in markdown parsing for ${pad}:`, err);
-        res.send("Oops, something went wrong!");
+        console.error(`Failed to render pad ${padName}`);
+        return res.status(404).send("<h1>404 Not Found</h1>");
       }
     }
   });
