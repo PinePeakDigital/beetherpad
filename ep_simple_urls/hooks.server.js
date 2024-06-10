@@ -34,10 +34,7 @@ function getMatchingDomain(url) {
 
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", (req, res) => {
-    res.send(`
-  <h1>DtherPad: dreeves's EtherPad <br> Also known as hippo.padm.us</h1>
-  <p>(If you don't know how to create new pads, ask <a href="http://ai.eecs.umich.edu/people/dreeves">dreeves</a>.)</p>
-    `);
+    return res.redirect(302, "/public");
   });
 
   args.app.use((req, res, next) => {
