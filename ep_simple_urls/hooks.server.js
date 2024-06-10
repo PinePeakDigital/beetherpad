@@ -4,8 +4,12 @@ const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
 const rewrites = require("./rewrites.json");
+const toolbar = require("ep_etherpad-lite/node/utils/toolbar");
+const settings = require("ep_etherpad-lite/node/utils/Settings");
+const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
+const publicDomain = process.env.ETHERPAD_PUBLIC_DOMAIN;
 
 function getMatchingDomain(url) {
   let target;
@@ -42,11 +46,11 @@ exports.expressPreSession = async (hookName, args) => {
     }
 
     const { target, statusCode } = getMatchingDomain(req.url);
-      
+
     if (target) {
       return res.redirect(statusCode, target);
     }
-      
+
     next();
   });
 
@@ -163,4 +167,18 @@ exports.socketio = (hookName, args, callback) => {
   });
 
   return callback();
+};
+
+exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
+  const { renderContext } = context;
+  const { req } = renderContext;
+  const path = req.url;
+
+  const isReadOnly = !webaccess.userCanModify(req.params.pad, req);
+
+  context.content = eejs.require(
+    "ep_simple_urls/templates/expost_button.html",
+    { url: `${publicDomain}${path}`, toolbar, settings, isReadOnly },
+  );
+  return cb();
 };
