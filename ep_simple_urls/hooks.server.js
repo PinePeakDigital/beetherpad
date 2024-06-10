@@ -9,7 +9,6 @@ const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
-const publicDomain = process.env.ETHERPAD_PUBLIC_DOMAIN;
 
 function getMatchingDomain(url) {
   let target;
@@ -57,10 +56,12 @@ exports.expressPreSession = async (hookName, args) => {
     // but not "/foo/bar" or "/foo.bar".
     const postPathRegexp = /^[/][^/.]+[/]?$/;
     const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
+    const operationPathRegexp = /^[/][^/.]+[/]?\/(export|timeslider)\/?[^/]*/;
 
     const isPost = postPathRegexp.test(req.url);
     const isAdmin = postAdminRegexp.test(req.url);
-    if (isPost && !req.url.startsWith("/p/") && !isAdmin) {
+    const isOp = operationPathRegexp.test(req.url);
+    if ((isPost || isOp) && !req.url.startsWith("/p/") && !isAdmin) {
       req.url = `/p${req.url}`;
     }
     next();
@@ -175,7 +176,7 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `${publicDomain}${path}`, toolbar, settings, isReadOnly },
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
   );
   return cb();
 };
