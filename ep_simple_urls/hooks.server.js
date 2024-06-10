@@ -9,7 +9,6 @@ const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
-const publicDomain = process.env.ETHERPAD_PUBLIC_DOMAIN;
 
 function getMatchingDomain(url) {
   let target;
@@ -175,7 +174,7 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `${publicDomain}${path}`, toolbar, settings, isReadOnly },
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
   );
   return cb();
 };
