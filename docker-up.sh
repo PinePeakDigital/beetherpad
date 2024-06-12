@@ -11,7 +11,7 @@ if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
     exit 1
 fi
 
-ETHERPAD_VERSION='2.0.3'
+ETHERPAD_VERSION='bc1032a9d00caae8f34d6cfc11c8733c21fff0f1'
 ETHERPAD_PLUGINS="\
 ep_author_hover \
 ep_pad_activity_nofication_in_title \
