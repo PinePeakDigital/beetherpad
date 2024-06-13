@@ -54,6 +54,14 @@ done
 
 cp "$PWD/settings.json" "$etherpad_path/settings.json.docker"
 
+# Invoke like has_docker container beetherpad || docker run ...
+has_docker() {
+    type=$1
+    name=$2
+
+    docker "$1" inspect "$2" > /dev/null 2>&1
+}
+
 docker_build() {
     if [ "$DEV_ENV" = "true" ]; then
         set -- --build-arg=EP_UID=0
@@ -70,12 +78,17 @@ docker_build
 
 if [ "$DEV_ENV" = "true" ]; then
     # Environment Setup
-    docker volume create $DOCKER_POSTGRES_VOLUME_NAME
-    docker network create --driver bridge $DOCKER_NETWORK_NAME
+    has_docker volume $DOCKER_POSTGRES_VOLUME_NAME || \
+        docker volume create $DOCKER_POSTGRES_VOLUME_NAME
+    has_docker network $DOCKER_NETWORK_NAME || \
+        docker network create --driver bridge $DOCKER_NETWORK_NAME
+
+    has_docker container $DOCKER_POSTGRES_NAME && \
+        docker container rm $DOCKER_POSTGRES_NAME
 
     # Run containers
-    docker start $DOCKER_POSTGRES_NAME || docker run \
-        --name $DOCKER_POSTGRES_NAME \
+    docker run \
+        --name postgres \
         --restart always \
         --detach \
         --network=$DOCKER_NETWORK_NAME \
@@ -93,8 +106,9 @@ if [ "$DEV_ENV" = "true" ]; then
 fi
 
 docker_run() {
-    docker container rm $DOCKER_IMAGE_NAME
-
+    has_docker container $DOCKER_IMAGE_NAME && \
+        docker container rm $DOCKER_IMAGE_NAME
+    
     if [ "$DEV_ENV" = "true" ]; then
         set -- --network=$DOCKER_NETWORK_NAME
         for plugin in $ETHERPAD_LOCAL_PLUGINS; do
@@ -122,7 +136,7 @@ docker_run() {
 
 docker_run
 
-until [ "$(docker container inspect -f '{{.State.Health.Status}}' beetherpad)" = "healthy" ]; do
-    printf "%s\r" "Waiting for beetherpad..."
+until [ "$(docker container inspect -f '{{.State.Health.Status}}' $DOCKER_CONTAINER_NAME)" = "healthy" ]; do
+    printf "%s\r" "Waiting for $DOCKER_CONTAINER_NAME..."
     sleep 1
 done
