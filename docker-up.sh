@@ -5,6 +5,11 @@ if [ "$(uname)" = "Darwin" ]; then
     CACHE_DIR=${CACHE_DIR:=$HOME/Library/Caches}
 fi
 DEV_ENV=${DEV_ENV:-false}
+DB_HOST="${DB_HOST:-postgres}"
+DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-etherpad}"
+DB_USER="${DB_USER:-etherpad}"
+DB_PASS="${DB_PASS:-secretpassword}"
 
 if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
     echo "Secret domain isn't set! Set ETHERPAD_SECRET_DOMAIN."
@@ -92,11 +97,12 @@ if [ "$DEV_ENV" = "true" ]; then
         --restart always \
         --detach \
         --network=$DOCKER_NETWORK_NAME \
-        --env POSTGRES_USER=etherpad \
-        --env POSTGRES_PASSWORD=secretpassword \
-        --env POSTGRES_DB=etherpad \
+        --env POSTGRES_DB="${DB_NAME}" \
+        --env PGPORT="${DB_PORT}" \
+        --env POSTGRES_USER="${DB_USER}" \
+        --env POSTGRES_PASSWORD="${DB_PASS}" \
         --volume $DOCKER_POSTGRES_VOLUME_NAME:/var/lib/postgresql/data \
-        --publish 5432:5432 \
+        --publish "${DB_PORT}:${DB_PORT}" \
         postgres:latest
 
     until [ "$(docker container inspect -f '{{.State.Status}}' $DOCKER_POSTGRES_NAME)" = "running" ]; do
@@ -123,11 +129,11 @@ docker_run() {
         --restart always \
         --detach \
         --env DB_TYPE=postgres \
-        --env DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}" \
-        --env DB_PORT="${DB_PORT:-5432}" \
-        --env DB_NAME="${DB_NAME:-etherpad}" \
-        --env DB_USER="${DB_USER:-etherpad}" \
-        --env DB_PASS="${DB_PASS:-secretpassword}" \
+        --env DB_HOST="${DB_HOST}" \
+        --env DB_PORT="${DB_PORT}" \
+        --env DB_NAME="${DB_NAME}" \
+        --env DB_USER="${DB_USER}" \
+        --env DB_PASS="${DB_PASS}" \
         --env ETHERPAD_SECRET_DOMAIN="${ETHERPAD_SECRET_DOMAIN}" \
         --publish 9001:9001 \
         "$@" \
