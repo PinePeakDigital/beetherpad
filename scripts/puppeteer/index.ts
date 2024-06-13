@@ -3,7 +3,7 @@
 // npx tsx ./scripts/puppeteer.ts
 
 import { compareUrls, createReport } from "pixelteer";
-import getPaths from "./puppeteer/getPaths";
+import getPaths from "./getPaths";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
