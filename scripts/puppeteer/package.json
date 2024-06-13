@@ -4,7 +4,7 @@
   "description": "```bash docker-compose build docker-compose up open http://localhost:9001 ```",
   "main": "index.js",
   "scripts": {
-    "puppeteer": "npx tsx ./scripts/puppeteer.ts",
+    "puppeteer": "npx tsx ./index.ts",
     "test": "vitest --watch"
   },
   "author": "",
