@@ -121,3 +121,8 @@ docker_run() {
 }
 
 docker_run
+
+until [ "$(docker container inspect -f '{{.State.Health.Status}}' beetherpad)" = "healthy" ]; do
+    printf "%s\r" "Waiting for beetherpad..."
+    sleep 1
+done
