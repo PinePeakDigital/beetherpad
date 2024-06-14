@@ -106,7 +106,7 @@ docker_run() {
         --restart always \
         --detach \
         --env DB_TYPE=postgres \
-        --env DB_HOST="${DB_HOST:-postgres}" \
+        --env DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}" \
         --env DB_PORT="${DB_PORT:-5432}" \
         --env DB_NAME="${DB_NAME:-etherpad}" \
         --env DB_USER="${DB_USER:-etherpad}" \
