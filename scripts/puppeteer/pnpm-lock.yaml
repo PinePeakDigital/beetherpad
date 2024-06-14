@@ -10,7 +10,7 @@ importers:
     devDependencies:
       pixelteer:
         specifier: github:narthur/pixelteer
-        version: https://codeload.github.com/narthur/pixelteer/tar.gz/d27222f485d88410dbeac82d9cbfe590678bd6b0(puppeteer@22.6.5(typescript@5.4.5))
+        version: https://codeload.github.com/narthur/pixelteer/tar.gz/924a5d70f55fab8db5395781e176aea08f42b59c(puppeteer@22.6.5(typescript@5.4.5))
       puppeteer:
         specifier: 22.6.5
         version: 22.6.5(typescript@5.4.5)
@@ -846,8 +846,8 @@ packages:
     resolution: {integrity: sha512-o8mkY4E/+LNUf6LzX96ht6k6CEDi65k9G2rjMtBe9Oo+VPKSvl+0GKHuH/AlG+GA5LPG/i5hrekkxUc3s2HU+Q==}
     hasBin: true
 
-  pixelteer@https://codeload.github.com/narthur/pixelteer/tar.gz/d27222f485d88410dbeac82d9cbfe590678bd6b0:
-    resolution: {tarball: https://codeload.github.com/narthur/pixelteer/tar.gz/d27222f485d88410dbeac82d9cbfe590678bd6b0}
+  pixelteer@https://codeload.github.com/narthur/pixelteer/tar.gz/924a5d70f55fab8db5395781e176aea08f42b59c:
+    resolution: {tarball: https://codeload.github.com/narthur/pixelteer/tar.gz/924a5d70f55fab8db5395781e176aea08f42b59c}
     version: 1.0.0
     peerDependencies:
       puppeteer: ^22.6.5
@@ -1895,7 +1895,7 @@ snapshots:
     dependencies:
       pngjs: 6.0.0
 
-  pixelteer@https://codeload.github.com/narthur/pixelteer/tar.gz/d27222f485d88410dbeac82d9cbfe590678bd6b0(puppeteer@22.6.5(typescript@5.4.5)):
+  pixelteer@https://codeload.github.com/narthur/pixelteer/tar.gz/924a5d70f55fab8db5395781e176aea08f42b59c(puppeteer@22.6.5(typescript@5.4.5)):
     dependencies:
       pixelmatch: 5.3.0
       pngjs: 7.0.0
