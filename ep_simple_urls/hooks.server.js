@@ -10,11 +10,11 @@ const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
-function getMatchingDomain(url) {
+const getMatchingDomain = (url) => {
   let target;
   let statusCode = 301;
 
-  for (let rewrite of rewrites) {
+  for (const rewrite of rewrites) {
     if (url.match(rewrite.regex)) {
       target = rewrite.replace;
 
@@ -29,12 +29,10 @@ function getMatchingDomain(url) {
   }
 
   return { target, statusCode };
-}
+};
 
-async function renderPad(pad) {
-  let text;
-  const result = await API.getText(pad);
-  text = result.text;
+const renderPad = async (pad) => {
+  const { text } = await API.getText(pad);
 
   const body = await expost.parseMarkdown(text, { strict: false });
   const title = expost.parseTitle(text);
@@ -43,7 +41,7 @@ async function renderPad(pad) {
     title,
     body,
   });
-}
+};
 
 exports.expressPreSession = async (hookName, args) => {
   args.app.get("/", async (req, res) => {
@@ -105,7 +103,7 @@ exports.expressPreSession = async (hookName, args) => {
         const renderedPad = await renderPad(pad);
         return res.send(renderedPad);
       } catch (err) {
-        console.error(`Failed to render pad ${padName}`);
+        console.error(`Failed to render pad ${pad}`);
         return res.status(404).send("<h1>404 Not Found</h1>");
       }
     }
@@ -172,13 +170,13 @@ exports.socketio = (hookName, args, callback) => {
 
     socket.on("saveSettings", async (newSettings) => {
       console.log(
-        "Admin request to save settings through a socket on /admin/settings",
+        "Admin request to save settings through a socket on /admin/settings"
       );
     });
 
     socket.on("restartServer", async () => {
       console.log(
-        "Admin request to restart server through a socket on /admin/settings",
+        "Admin request to restart server through a socket on /admin/settings"
       );
     });
   });
@@ -195,7 +193,7 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly }
   );
   return cb();
 };
