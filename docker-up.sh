@@ -98,7 +98,10 @@ docker_run() {
     if [ "$DEV_ENV" = "true" ]; then
         set -- --network=$DOCKER_NETWORK_NAME
         for plugin in $ETHERPAD_LOCAL_PLUGINS; do
-            set -- --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" "$@"
+            set -- \
+                --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" \
+                --mount "type=volume,source=empty_volume_${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}/node_modules" \
+                "$@"
         done
     fi
 
@@ -106,7 +109,7 @@ docker_run() {
         --restart always \
         --detach \
         --env DB_TYPE=postgres \
-        --env DB_HOST="${DB_HOST:-postgres}" \
+        --env DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}" \
         --env DB_PORT="${DB_PORT:-5432}" \
         --env DB_NAME="${DB_NAME:-etherpad}" \
         --env DB_USER="${DB_USER:-etherpad}" \

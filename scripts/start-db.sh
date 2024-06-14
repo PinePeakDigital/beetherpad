@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose run --service-ports postgres
+docker-compose run --service-ports beetherpad-postgres
