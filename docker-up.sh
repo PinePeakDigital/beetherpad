@@ -93,7 +93,7 @@ if [ "$DEV_ENV" = "true" ]; then
 
     # Run containers
     docker run \
-        --name postgres \
+        --name $DOCKER_POSTGRES_NAME \
         --restart always \
         --detach \
         --network=$DOCKER_NETWORK_NAME \
