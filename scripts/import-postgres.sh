@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONTAINER_NAME="postgres"
+CONTAINER_NAME="beetherpad-postgres"
 DUMP_FILE="dump-postgres.sql"
 DB_USER="etherpad"
 DB_NAME="etherpad"
