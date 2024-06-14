@@ -5,7 +5,6 @@ if [ "$(uname)" = "Darwin" ]; then
     CACHE_DIR=${CACHE_DIR:=$HOME/Library/Caches}
 fi
 DEV_ENV=${DEV_ENV:-false}
-DB_HOST="${DB_HOST:-postgres}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-etherpad}"
 DB_USER="${DB_USER:-etherpad}"
@@ -22,6 +21,7 @@ DOCKER_POSTGRES_NAME="beetherpad-postgres"
 DOCKER_POSTGRES_VOLUME_NAME="beetherpad-postgres-data"
 DOCKER_IMAGE_NAME="beetherpad"
 DOCKER_CONTAINER_NAME="beetherpad"
+DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}"
 
 ETHERPAD_VERSION='bc1032a9d00caae8f34d6cfc11c8733c21fff0f1'
 ETHERPAD_PLUGINS="\
