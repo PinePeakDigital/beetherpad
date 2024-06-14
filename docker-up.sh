@@ -98,7 +98,10 @@ docker_run() {
     if [ "$DEV_ENV" = "true" ]; then
         set -- --network=$DOCKER_NETWORK_NAME
         for plugin in $ETHERPAD_LOCAL_PLUGINS; do
-            set -- --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" "$@"
+            set -- \
+                --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" \
+                --mount "type=volume,source=empty_volume_${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}/node_modules" \
+                "$@"
         done
     fi
 
