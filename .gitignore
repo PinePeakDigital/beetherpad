@@ -5,3 +5,4 @@ node_modules
 .temp*
 tmp
 shots/
+package-lock.json

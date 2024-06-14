@@ -11,6 +11,13 @@ if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
     exit 1
 fi
 
+# Docker resource names
+DOCKER_NETWORK_NAME="beetherpad-network"
+DOCKER_POSTGRES_NAME="beetherpad-postgres"
+DOCKER_POSTGRES_VOLUME_NAME="beetherpad-postgres-data"
+DOCKER_IMAGE_NAME="beetherpad"
+DOCKER_CONTAINER_NAME="beetherpad"
+
 ETHERPAD_VERSION='bc1032a9d00caae8f34d6cfc11c8733c21fff0f1'
 ETHERPAD_PLUGINS="\
 ep_author_hover \
@@ -52,7 +59,7 @@ docker_build() {
         set -- --build-arg=EP_UID=0
     fi
 
-    docker build -t beetherpad \
+    docker build -t $DOCKER_IMAGE_NAME \
         --build-arg=ETHERPAD_PLUGINS="$ETHERPAD_PLUGINS" \
         --build-arg=ETHERPAD_LOCAL_PLUGINS="$etherpad_local_plugins_buildarg" \
         "$@" \
@@ -63,39 +70,39 @@ docker_build
 
 if [ "$DEV_ENV" = "true" ]; then
     # Environment Setup
-    docker volume create postgres-data
-    docker network create --driver bridge beetherpad-network
+    docker volume create $DOCKER_POSTGRES_VOLUME_NAME
+    docker network create --driver bridge $DOCKER_NETWORK_NAME
 
     # Run containers
-    docker start postgres || docker run \
-        --name postgres \
+    docker start $DOCKER_POSTGRES_NAME || docker run \
+        --name $DOCKER_POSTGRES_NAME \
         --restart always \
         --detach \
-        --network=beetherpad-network \
+        --network=$DOCKER_NETWORK_NAME \
         --env POSTGRES_USER=etherpad \
         --env POSTGRES_PASSWORD=secretpassword \
         --env POSTGRES_DB=etherpad \
-        --volume postgres-data:/var/lib/postgresql/data \
+        --volume $DOCKER_POSTGRES_VOLUME_NAME:/var/lib/postgresql/data \
         --publish 5432:5432 \
         postgres:latest
 
-    until [ "$(docker container inspect -f '{{.State.Status}}' postgres)" = "running" ]; do
-        printf "%s\r" "Waiting for postgres..."
+    until [ "$(docker container inspect -f '{{.State.Status}}' $DOCKER_POSTGRES_NAME)" = "running" ]; do
+        printf "%s\r" "Waiting for $DOCKER_POSTGRES_NAME..."
         sleep 2
     done
 fi
 
 docker_run() {
-    docker container rm beetherpad
+    docker container rm $DOCKER_IMAGE_NAME
 
     if [ "$DEV_ENV" = "true" ]; then
-        set -- --network=beetherpad-network
+        set -- --network=$DOCKER_NETWORK_NAME
         for plugin in $ETHERPAD_LOCAL_PLUGINS; do
             set -- --mount "type=bind,source=$(pwd)/${plugin},target=/opt/etherpad-lite/node_modules/ep_etherpad-lite/node_modules/${plugin}" "$@"
         done
     fi
 
-    docker run --name beetherpad \
+    docker run --name $DOCKER_CONTAINER_NAME \
         --restart always \
         --detach \
         --env DB_TYPE=postgres \
@@ -107,7 +114,7 @@ docker_run() {
         --env ETHERPAD_SECRET_DOMAIN="${ETHERPAD_SECRET_DOMAIN}" \
         --publish 9001:9001 \
         "$@" \
-        beetherpad
+        $DOCKER_IMAGE_NAME
 }
 
 docker_run
