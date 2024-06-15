@@ -5,6 +5,10 @@ if [ "$(uname)" = "Darwin" ]; then
     CACHE_DIR=${CACHE_DIR:=$HOME/Library/Caches}
 fi
 DEV_ENV=${DEV_ENV:-false}
+DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-etherpad}"
+DB_USER="${DB_USER:-etherpad}"
+DB_PASS="${DB_PASS:-secretpassword}"
 
 if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
     echo "Secret domain isn't set! Set ETHERPAD_SECRET_DOMAIN."
@@ -17,6 +21,7 @@ DOCKER_POSTGRES_NAME="beetherpad-postgres"
 DOCKER_POSTGRES_VOLUME_NAME="beetherpad-postgres-data"
 DOCKER_IMAGE_NAME="beetherpad"
 DOCKER_CONTAINER_NAME="beetherpad"
+DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}"
 
 ETHERPAD_VERSION='bc1032a9d00caae8f34d6cfc11c8733c21fff0f1'
 ETHERPAD_PLUGINS="\
@@ -54,6 +59,14 @@ done
 
 cp "$PWD/settings.json" "$etherpad_path/settings.json.docker"
 
+# Invoke like has_docker container beetherpad || docker run ...
+has_docker() {
+    type=$1
+    name=$2
+
+    docker "$1" inspect "$2" > /dev/null 2>&1
+}
+
 docker_build() {
     if [ "$DEV_ENV" = "true" ]; then
         set -- --build-arg=EP_UID=0
@@ -70,20 +83,26 @@ docker_build
 
 if [ "$DEV_ENV" = "true" ]; then
     # Environment Setup
-    docker volume create $DOCKER_POSTGRES_VOLUME_NAME
-    docker network create --driver bridge $DOCKER_NETWORK_NAME
+    has_docker volume $DOCKER_POSTGRES_VOLUME_NAME || \
+        docker volume create $DOCKER_POSTGRES_VOLUME_NAME
+    has_docker network $DOCKER_NETWORK_NAME || \
+        docker network create --driver bridge $DOCKER_NETWORK_NAME
+
+    has_docker container $DOCKER_POSTGRES_NAME && \
+        docker container rm $DOCKER_POSTGRES_NAME
 
     # Run containers
-    docker start $DOCKER_POSTGRES_NAME || docker run \
+    docker run \
         --name $DOCKER_POSTGRES_NAME \
         --restart always \
         --detach \
         --network=$DOCKER_NETWORK_NAME \
-        --env POSTGRES_USER=etherpad \
-        --env POSTGRES_PASSWORD=secretpassword \
-        --env POSTGRES_DB=etherpad \
+        --env POSTGRES_DB="${DB_NAME}" \
+        --env PGPORT="${DB_PORT}" \
+        --env POSTGRES_USER="${DB_USER}" \
+        --env POSTGRES_PASSWORD="${DB_PASS}" \
         --volume $DOCKER_POSTGRES_VOLUME_NAME:/var/lib/postgresql/data \
-        --publish 5432:5432 \
+        --publish "${DB_PORT}:${DB_PORT}" \
         postgres:latest
 
     until [ "$(docker container inspect -f '{{.State.Status}}' $DOCKER_POSTGRES_NAME)" = "running" ]; do
@@ -93,8 +112,9 @@ if [ "$DEV_ENV" = "true" ]; then
 fi
 
 docker_run() {
-    docker container rm $DOCKER_IMAGE_NAME
-
+    has_docker container $DOCKER_IMAGE_NAME && \
+        docker container rm $DOCKER_IMAGE_NAME
+    
     if [ "$DEV_ENV" = "true" ]; then
         set -- --network=$DOCKER_NETWORK_NAME
         for plugin in $ETHERPAD_LOCAL_PLUGINS; do
@@ -109,11 +129,11 @@ docker_run() {
         --restart always \
         --detach \
         --env DB_TYPE=postgres \
-        --env DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}" \
-        --env DB_PORT="${DB_PORT:-5432}" \
-        --env DB_NAME="${DB_NAME:-etherpad}" \
-        --env DB_USER="${DB_USER:-etherpad}" \
-        --env DB_PASS="${DB_PASS:-secretpassword}" \
+        --env DB_HOST="${DB_HOST}" \
+        --env DB_PORT="${DB_PORT}" \
+        --env DB_NAME="${DB_NAME}" \
+        --env DB_USER="${DB_USER}" \
+        --env DB_PASS="${DB_PASS}" \
         --env ETHERPAD_SECRET_DOMAIN="${ETHERPAD_SECRET_DOMAIN}" \
         --publish 9001:9001 \
         "$@" \
@@ -121,3 +141,8 @@ docker_run() {
 }
 
 docker_run
+
+until [ "$(docker container inspect -f '{{.State.Health.Status}}' $DOCKER_CONTAINER_NAME)" = "healthy" ]; do
+    printf "%s\r" "Waiting for $DOCKER_CONTAINER_NAME..."
+    sleep 1
+done
