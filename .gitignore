@@ -4,6 +4,8 @@ node_modules
 .*.txt
 .temp*
 tmp
+html/
+md/
 shots/
 package-lock.json
 *.log
