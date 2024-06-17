@@ -8,7 +8,7 @@ if [ -f "$ENV" ]; then
   export $(cat $ENV | xargs)
 fi
 
-mkdir -p $DIR/md
+mkdir -p $DIR/html
 slugs=$($DIR/padlist.sh | awk -F: '{split($2,a," "); print a[1]}')
 
 longest_length=0
@@ -31,8 +31,8 @@ do
         continue
     fi
     
-    prod="https://$SERVER_URL/$slug/export/txt"
-    local="http://localhost:9001/p/$slug/export/txt"
+    prod="https://$SERVER_URL/$slug"
+    local="http://localhost:9001/p/$slug"
 
     # fetch the data from the URLs
     data1=$(curl --max-time 10 -s $prod) || data1='prodfail'
@@ -61,8 +61,8 @@ do
         echo "✅ $padded $progress\t    Identical"
     else
         echo "❌ $padded $progress\t    Different"
-        echo "$data1" > $DIR/md/$slug.prod.txt
-        echo "$data2" > $DIR/md/$slug.local.txt
-        diff $DIR/md/$slug.prod.txt $DIR/md/$slug.local.txt > $DIR/md/$slug.diff.txt
+        echo "$data1" > $DIR/html/$slug.prod.txt
+        echo "$data2" > $DIR/html/$slug.local.txt
+        diff $DIR/html/$slug.prod.txt $DIR/html/$slug.local.txt > $DIR/html/$slug.diff.txt
     fi
 done
