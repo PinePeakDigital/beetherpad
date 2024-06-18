@@ -1,9 +1,7 @@
 #!/bin/sh
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 ENV="$DIR/../.env"
-
 if [ -f "$ENV" ]; then
   export $(cat $ENV | xargs)
 fi
@@ -31,8 +29,8 @@ do
         continue
     fi
     
-    prod="https://$SERVER_URL/$slug"
-    local="http://localhost:9001/p/$slug"
+    prod="https://$PROD_PUBLIC_DOMAIN/$slug"
+    local="http://$LOCAL_PUBLIC_DOMAIN:9001/$slug"
 
     # fetch the data from the URLs
     data1=$(curl --max-time 10 -s $prod) || data1='prodfail'

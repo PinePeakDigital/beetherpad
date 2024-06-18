@@ -31,8 +31,8 @@ do
         continue
     fi
     
-    prod="https://$SERVER_URL/$slug/export/txt"
-    local="http://localhost:9001/p/$slug/export/txt"
+    prod="https://$PROD_SECRET_DOMAIN/$slug/export/txt"
+    local="http://$LOCAL_SECRET_DOMAIN:9001/p/$slug/export/txt"
 
     # fetch the data from the URLs
     data1=$(curl --max-time 10 -s $prod) || data1='prodfail'

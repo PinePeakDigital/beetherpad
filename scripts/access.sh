@@ -1,24 +1,26 @@
 #!/bin/sh
 
 dir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+ENV="$dir/../.env"
+if [ -f "$ENV" ]; then
+  export $(cat $ENV | xargs)
+fi
+
 editor_regex="Feature-Policy: sync-xhr 'self'"
 
 fetch_post() {
-    domain=$1
-    slug=$2
-
-    set -- "https://$domain/$slug"
-
     if [ "$DEV_ENV" = "true" ]; then
-        set -- --resolve "$domain:9001:127.0.0.1" "http://$domain:9001/$slug"
+        url="http://$1:9001/$2"
+    else
+        url="https://$1/$2"
     fi
 
-    curl -sLI "$@"
+    curl -sLI "$url"
 }
 
 echo "Sanity checking..."
 
-if ! fetch_post "$ETHERPAD_SECRET_DOMAIN" "expost" | grep -q "$editor_regex"; then
+if ! fetch_post "$LOCAL_SECRET_DOMAIN" "expost" | grep -q "$editor_regex"; then
     echo "Can't detect editor app on secret domain!"
     exit
 fi
@@ -31,7 +33,7 @@ checked=0
 printf "\33[2KChecked %d/%d\r" $checked "$count"
 
 for slug in $slugs; do
-    if fetch_post "$ETHERPAD_PUBLIC_DOMAIN" "$slug" | grep -q "$editor_regex"; then
+    if fetch_post "$LOCAL_PUBLIC_DOMAIN" "$slug" | grep -q "$editor_regex"; then
         echo "Editor for $slug is publicly accessible!"
         exit 1
     fi
