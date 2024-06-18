@@ -3,6 +3,12 @@
 
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ENV="$DIR/../.env"
+if [ -f "$ENV" ]; then
+  export $(cat $ENV | xargs)
+fi
+
 retry() {
   local retries=3
   local wait=3
