@@ -14,9 +14,8 @@ for slug in $slugs
 do
     if [ -z "$slug" ]
     then
-        echo "empty slug"
         continue
     fi
     
-    echo "$SERVER_URL/$slug"
+    echo "$slug"
 done

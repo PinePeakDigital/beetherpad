@@ -3,6 +3,12 @@
 
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ENV="$DIR/../.env"
+if [ -f "$ENV" ]; then
+  export $(cat $ENV | xargs)
+fi
+
 retry() {
   local retries=3
   local wait=3
@@ -41,7 +47,7 @@ POSTGRES_CONTAINER_NAME=beetherpad-postgres-transfer
 
 # WARNING: Causes etherpad downtime
 # echo dump the MySQL database
-# ssh root@$SERVER_URL 'mysqldump -u etherpad -p etherpad' > $MYSQL_FILENAME
+# ssh root@$PROD_SECRET_DOMAIN 'mysqldump -u etherpad -p etherpad' > $MYSQL_FILENAME
 
 echo start a local MySQL container
 if [ $(docker ps -q -f name=$MYSQL_CONTAINER_NAME) ]; then

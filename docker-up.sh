@@ -1,5 +1,11 @@
 #!/bin/sh
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ENV="$DIR/.env"
+if [ -f "$ENV" ]; then
+  export $(cat $ENV | xargs)
+fi
+
 CACHE_DIR=${CACHE_DIR:=$HOME/.cache}
 if [ "$(uname)" = "Darwin" ]; then
     CACHE_DIR=${CACHE_DIR:=$HOME/Library/Caches}
@@ -10,8 +16,14 @@ DB_NAME="${DB_NAME:-etherpad}"
 DB_USER="${DB_USER:-etherpad}"
 DB_PASS="${DB_PASS:-secretpassword}"
 
+if [ "$DEV_ENV" = "true" ]; then
+    ETHERPAD_SECRET_DOMAIN=$LOCAL_SECRET_DOMAIN
+else
+    ETHERPAD_SECRET_DOMAIN=$PROD_SECRET_DOMAIN
+fi
+
 if [ -z "${ETHERPAD_SECRET_DOMAIN}" ]; then
-    echo "Secret domain isn't set! Set ETHERPAD_SECRET_DOMAIN."
+    echo "Secret domain isn't set! Ensure DEV_ENV, LOCAL_SECRET_DOMAIN, & PROD_SECRET_DOMAIN are properly defined."
     exit 1
 fi
 
