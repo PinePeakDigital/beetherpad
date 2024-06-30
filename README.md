@@ -4,7 +4,7 @@
 
 ```bash
 git submodule update --init --recursive
-cp .env.example .env # edit .env as needed
+cp .env.sample .env # edit .env as needed
 echo "127.0.0.1 secretdomain" | sudo tee -a /etc/hosts
 ```
 
