@@ -7,6 +7,7 @@ const rewrites = require("./rewrites.json");
 const toolbar = require("ep_etherpad-lite/node/utils/toolbar");
 const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
+const cheerio = require("cheerio");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
@@ -35,10 +36,17 @@ const renderPad = async (pad) => {
   const { text } = await API.getText(pad);
 
   const body = await expost.parseMarkdown(text, { strict: false });
+  const $ = cheerio.load(body);
   const title = expost.parseTitle(text);
+  let desc = $.text();
+  if (desc.length > 160) {
+    desc = desc.substring(0,160);
+    desc += "...";
+  }
 
   return eejs.require("ep_simple_urls/templates/pad.html", {
     title,
+    desc,
     body,
   });
 };
