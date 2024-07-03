@@ -36,7 +36,12 @@ const renderPad = async (pad) => {
   const { text } = await API.getText(pad);
 
   const body = await expost.parseMarkdown(text, { strict: false });
-  const $ = cheerio.load(body);
+  const $ = cheerio.load(body, {
+    xml: {
+      xmlMode: false,
+      decodeEntities: false,
+    }
+  });
   const title = expost.parseTitle(text);
   let desc = $.text();
   if (desc.length > 160) {
