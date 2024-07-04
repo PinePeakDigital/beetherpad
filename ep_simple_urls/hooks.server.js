@@ -80,12 +80,6 @@ exports.expressPreSession = async (hookName, args) => {
       return res.status(401).send("Unauthorized");
     }
 
-    const { target, statusCode } = getMatchingDomain(req.url);
-
-    if (target) {
-      return res.redirect(statusCode, target);
-    }
-
     next();
   });
 
@@ -103,6 +97,16 @@ exports.expressPreSession = async (hookName, args) => {
     if ((isPost || isOp) && !req.url.startsWith("/p/") && !isAdmin) {
       req.url = `/p${req.url}`;
     }
+    next();
+  });
+
+  args.app.use((req, res, next) => {
+    const { target, statusCode } = getMatchingDomain(req.url);
+
+    if (target) {
+      return res.redirect(statusCode, target);
+    }
+
     next();
   });
 
