@@ -38,7 +38,11 @@ jobs:
           done
       - name: Push the Docker image
         id: push
-        run: docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: |
+          docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          DIGEST=$(docker image inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --format='{{index .RepoDigests 0}}')
+          echo "DIGEST=$DIGEST" >> $GITHUB_ENV
+          echo "::set-output name=digest::$DIGEST"
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
