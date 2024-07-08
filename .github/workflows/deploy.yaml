@@ -18,9 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: git submodule update --init --recursive
-      - run: ./docker-build.sh
-        with:
-          DOCKER_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - run: DOCKER_IMAGE_NAME="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" ./docker-build.sh
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -36,11 +34,11 @@ jobs:
         run: |
           echo '${{ steps.meta.outputs.tags }}' | tr ',' '\n' | while read -r TAG; do
             echo $TAG
-            docker image tag docker.io/library/${{ env.IMAGE_NAME }} $TAG
+            docker image tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} $TAG
           done
       - name: Push the Docker image
         id: push
-        run: docker image push docker.${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
