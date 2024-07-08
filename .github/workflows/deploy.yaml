@@ -6,7 +6,7 @@ on:
     #   - master
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: beetherpad
+  IMAGE_NAME: ${{ github.repository }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: git submodule update --init --recursive
       - run: ./docker-build.sh
+        with:
+          DOCKER_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -38,7 +40,7 @@ jobs:
           done
       - name: Push the Docker image
         id: push
-        run: docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: docker image push docker.${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:

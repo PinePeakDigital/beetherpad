@@ -16,7 +16,7 @@ DEV_ENV=${DEV_ENV:-false}
 DOCKER_NETWORK_NAME="beetherpad-network"
 DOCKER_POSTGRES_NAME="beetherpad-postgres"
 DOCKER_POSTGRES_VOLUME_NAME="beetherpad-postgres-data"
-DOCKER_IMAGE_NAME="beetherpad"
+DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME:-beetherpad}"
 DOCKER_CONTAINER_NAME="beetherpad"
 DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}"
 
