@@ -1,7 +1,18 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link id="favicon" rel="icon"
+      href="https://doc.beeminder.com/favicon.ico" type="image/x-icon">
     <title><%= title %></title>
+    <meta name="description" content="<%= desc %>">
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="<%= title %>" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="<%= desc %>" />
+    <meta property="og:image" content="https://doc.beeminder.com/favicon.ico" />
+    <meta name="twitter:card" content="summary" />
     <script
       type="text/javascript"
       id="MathJax-script"
@@ -16,7 +27,7 @@
   </head>
   <body>
     <% if (title) { %>
-    <h1><%= title %></h1>
+    <h1><%- title %></h1>
     <% } %> <%- body %>
   </body>
 </html>

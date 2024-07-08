@@ -23,6 +23,10 @@
     "last": true
   },
   {
+    "regex": "^/p/.*[^\\w-].*$",
+    "replace": "/api/404"
+  },
+  {
     "regex": "^/.*.html$",
     "replace": "/api/404"
   },

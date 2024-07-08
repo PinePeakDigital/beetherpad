@@ -7,6 +7,7 @@ const rewrites = require("./rewrites.json");
 const toolbar = require("ep_etherpad-lite/node/utils/toolbar");
 const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
+const cheerio = require("cheerio");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
@@ -35,10 +36,22 @@ const renderPad = async (pad) => {
   const { text } = await API.getText(pad);
 
   const body = await expost.parseMarkdown(text, { strict: false });
+  const $ = cheerio.load(body, {
+    xml: {
+      xmlMode: false,
+      decodeEntities: false,
+    },
+  });
   const title = expost.parseTitle(text);
+  let desc = $.text();
+  if (desc.length > 160) {
+    desc = desc.substring(0, 160);
+    desc += "...";
+  }
 
   return eejs.require("ep_simple_urls/templates/pad.html", {
     title,
+    desc,
     body,
   });
 };
@@ -67,12 +80,6 @@ exports.expressPreSession = async (hookName, args) => {
       return res.status(401).send("Unauthorized");
     }
 
-    const { target, statusCode } = getMatchingDomain(req.url);
-
-    if (target) {
-      return res.redirect(statusCode, target);
-    }
-
     next();
   });
 
@@ -90,6 +97,16 @@ exports.expressPreSession = async (hookName, args) => {
     if ((isPost || isOp) && !req.url.startsWith("/p/") && !isAdmin) {
       req.url = `/p${req.url}`;
     }
+    next();
+  });
+
+  args.app.use((req, res, next) => {
+    const { target, statusCode } = getMatchingDomain(req.url);
+
+    if (target) {
+      return res.redirect(statusCode, target);
+    }
+
     next();
   });
 
@@ -170,13 +187,13 @@ exports.socketio = (hookName, args, callback) => {
 
     socket.on("saveSettings", async (newSettings) => {
       console.log(
-        "Admin request to save settings through a socket on /admin/settings"
+        "Admin request to save settings through a socket on /admin/settings",
       );
     });
 
     socket.on("restartServer", async () => {
       console.log(
-        "Admin request to restart server through a socket on /admin/settings"
+        "Admin request to restart server through a socket on /admin/settings",
       );
     });
   });
@@ -193,7 +210,7 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly }
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
   );
   return cb();
 };

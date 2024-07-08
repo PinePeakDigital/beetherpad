@@ -48,17 +48,17 @@ etherpad_path="$CACHE_DIR/etherpad-lite"
 etherpad_plugin_path="$etherpad_path/src/local_plugins"
 
 if [ ! -d "$etherpad_path" ]; then
-    git clone --branch "$ETHERPAD_VERSION" --depth 1 \
+    git clone --depth 1 \
         'https://github.com/ether/etherpad-lite.git' "$etherpad_path"
-else
-    old_dir="$PWD"
-    cd "$etherpad_path" || exit
-    git reset --hard HEAD
-    git clean -xdf
-    git fetch origin "$ETHERPAD_VERSION"
-    git checkout "$ETHERPAD_VERSION"
-    cd "$old_dir" || exit
 fi
+
+old_dir="$PWD"
+cd "$etherpad_path" || exit
+git reset --hard HEAD
+git clean -xdf
+git fetch origin "$ETHERPAD_VERSION"
+git checkout "$ETHERPAD_VERSION"
+cd "$old_dir" || exit
 
 mkdir -p "$etherpad_plugin_path"
 
