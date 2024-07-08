@@ -6,7 +6,7 @@ on:
     #   - master
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: beeminder/beetherpad
+  IMAGE_NAME: ${{ github.repository }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
