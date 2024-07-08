@@ -33,7 +33,8 @@ jobs:
       - name: Apply tags to image
         run: |
           echo '${{ steps.meta.outputs.tags }}' | tr ',' '\n' | while read -r TAG; do
-            docker image tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$TAG
+            echo $TAG
+            docker image tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} $TAG
           done
       - name: Push the Docker image
         id: push
