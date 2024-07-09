@@ -8,6 +8,7 @@ const toolbar = require("ep_etherpad-lite/node/utils/toolbar");
 const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 const cheerio = require("cheerio");
+const { shouldRewriteUrl } = require("./lib/shouldRewriteUrl");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
@@ -84,19 +85,12 @@ exports.expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
-    // We don't want to redirect any of the static pad resources
-    // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
-    // but not "/foo/bar" or "/foo.bar".
-    const postPathRegexp = /^[/][^/.]+[/]?$/;
-    const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
-    const operationPathRegexp = /^[/][^/.]+[/]?\/(export|timeslider)\/?[^/]*/;
+    const shouldRewrite = shouldRewriteUrl(req.url);
 
-    const isPost = postPathRegexp.test(req.url);
-    const isAdmin = postAdminRegexp.test(req.url);
-    const isOp = operationPathRegexp.test(req.url);
-    if ((isPost || isOp) && !req.url.startsWith("/p/") && !isAdmin) {
+    if (shouldRewrite) {
       req.url = `/p${req.url}`;
     }
+
     next();
   });
 
@@ -127,7 +121,7 @@ exports.expressPreSession = async (hookName, args) => {
   });
 
   args.app.get("/api/404", (req, res) => {
-    res.send("<h1>404 Not Found</h1>");
+    res.status(404).send("<h1>404 Not Found</h1>");
   });
 };
 
@@ -187,13 +181,13 @@ exports.socketio = (hookName, args, callback) => {
 
     socket.on("saveSettings", async (newSettings) => {
       console.log(
-        "Admin request to save settings through a socket on /admin/settings",
+        "Admin request to save settings through a socket on /admin/settings"
       );
     });
 
     socket.on("restartServer", async () => {
       console.log(
-        "Admin request to restart server through a socket on /admin/settings",
+        "Admin request to restart server through a socket on /admin/settings"
       );
     });
   });
@@ -210,7 +204,7 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly }
   );
   return cb();
 };
