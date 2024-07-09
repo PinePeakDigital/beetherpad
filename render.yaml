@@ -1,7 +1,9 @@
 services:
   - type: web
-    name: web
-    runtime: docker
+    name: beetherpad-web
+    runtime: image
+    image:
+      url: ghcr.io/narthur/beetherpad:latest
     envVars:
       - key: DB_TYPE
         value: postgres
@@ -26,5 +28,5 @@ services:
           name: db
           property: password
 databases:
-  - name: db
+  - name: beetherpad-db
     plan: standard
