@@ -106,6 +106,7 @@ exports.expressPreSession = async (hookName, args) => {
 
   args.app.get("/p/:pad", async (req, res, next) => {
     const { pad } = req.params;
+    console.log({ pad, hostname: req.hostname, secretDomain });
 
     if (req.hostname === secretDomain) {
       next();
