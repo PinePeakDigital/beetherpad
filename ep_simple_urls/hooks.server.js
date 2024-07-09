@@ -106,9 +106,11 @@ exports.expressPreSession = async (hookName, args) => {
 
   args.app.get("/p/:pad", async (req, res, next) => {
     const { pad } = req.params;
-    console.log({ pad, hostname: req.hostname, secretDomain });
+    const { public: forcePublic } = req.query;
+    const shouldShowEditor =
+      req.hostname === secretDomain || forcePublic !== "true";
 
-    if (req.hostname === secretDomain) {
+    if (shouldShowEditor) {
       next();
     } else {
       try {
@@ -116,6 +118,7 @@ exports.expressPreSession = async (hookName, args) => {
         return res.send(renderedPad);
       } catch (err) {
         console.error(`Failed to render pad ${pad}`);
+        console.error(err);
         return res.status(404).send("<h1>404 Not Found</h1>");
       }
     }
