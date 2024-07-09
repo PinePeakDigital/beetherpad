@@ -38,15 +38,4 @@ jobs:
             docker image tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} $TAG
           done
       - name: Push the Docker image
-        id: push
-        run: |
-          docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          DIGEST=$(docker images --no-trunc --quiet ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | head -n 1)
-          echo "[$DIGEST]"
-          echo "digest=$DIGEST" >> $GITHUB_OUTPUT
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+        run: docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
