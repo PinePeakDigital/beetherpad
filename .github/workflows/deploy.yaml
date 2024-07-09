@@ -41,7 +41,7 @@ jobs:
         id: push
         run: |
           docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          DIGEST=$(docker images --no-trunc --quiet ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }})
+          DIGEST=$(docker images --no-trunc --quiet ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | head -n 1)
           echo "[$DIGEST]"
           echo "digest=$DIGEST" >> $GITHUB_OUTPUT
       - name: Generate artifact attestation
