@@ -39,3 +39,5 @@ jobs:
           done
       - name: Push the Docker image
         run: docker image push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Trigger Render.com re-deploy
+        run: curl ${{ secrets.RENDER_WEBHOOK_URL }}
