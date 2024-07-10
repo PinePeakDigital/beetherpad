@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # USAGE:
-# PGPASSWORD=the_password DB_HOST=the_host DB_PORT=the_port DB_USER=the_user DB_NAME=the_name ./scripts/push-postgres.sh
+# PGPASSWORD=the_password DB_HOST=the_host DB_USER=the_user DB_NAME=the_name ./scripts/push-postgres.sh
 # or use .env to set them
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -13,6 +13,7 @@ fi
 export PGPASSWORD
 
 DUMP_FILE="dump-postgres.sql"
+# DUMP_FILE="minidump.sql"
 
 read -p "This will delete the existing contents of the database. Are you sure you want to continue? (y/N) " confirm
 if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
@@ -20,14 +21,53 @@ if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
     exit 1
 fi
 
-# Delete the contents of the target database
-echo "DROP SCHEMA IF EXISTS etherpad CASCADE; DROP TABLE IF EXISTS store CASCADE;" | psql -h $DB_HOST -U $DB_USER -d $DB_NAME
+# Check if the dump file exists
+if [ ! -f $DUMP_FILE ]; then
+        echo "Dump file not found: $DUMP_FILE"
+        exit 1
+fi
 
-# Check the format of the dump file
+# Check if PGPASSWORD is set
+if [ -z $PGPASSWORD ]; then
+        echo "PGPASSWORD is not set"
+        exit 1
+fi
+
+# Check if DB_HOST is set
+if [ -z $DB_HOST ]; then
+        echo "DB_HOST is not set"
+        exit 1
+fi
+
+# Check if DB_USER is set
+if [ -z $DB_USER ]; then
+        echo "DB_USER is not set"
+        exit 1
+fi
+
+# Check if DB_NAME is set
+if [ -z $DB_NAME ]; then
+        echo "DB_NAME is not set"
+        exit 1
+fi
+
+echo "Preparing database..."
+echo "DROP SCHEMA IF EXISTS etherpad CASCADE; \
+DROP TABLE IF EXISTS store CASCADE; \
+CREATE ROLE etherpad; \
+GRANT ALL ON SCHEMA public TO etherpad; \
+GRANT etherpad TO $DB_USER;" | \
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME
+
+echo "Restoring database from dump file..."
 if file $DUMP_FILE | grep -q "PostgreSQL custom database dump"; then
         # Use pg_restore for custom or tar file formats
-        pg_restore -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c $DUMP_FILE
+        echo "Using pg_restore..."
+        pg_restore -h $DB_HOST -U $DB_USER -d $DB_NAME -c $DUMP_FILE
 else
         # Use psql for plain-text files
-        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f $DUMP_FILE
+        echo "Using psql..."
+        psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f $DUMP_FILE
 fi
+
+echo "Done"
