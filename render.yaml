@@ -30,4 +30,3 @@ services:
 databases:
   - name: beetherpad-db
     plan: standard
-    user: etherpad
