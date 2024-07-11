@@ -54,10 +54,7 @@ fi
 
 echo "Preparing database..."
 PREP_SQL="DROP SCHEMA IF EXISTS $DB_NAME CASCADE; \
-DROP TABLE IF EXISTS store CASCADE; \
-CREATE ROLE etherpad LOGIN; \
-GRANT ALL ON SCHEMA public TO etherpad; \
-GRANT etherpad TO $DB_USER;"
+DROP TABLE IF EXISTS store CASCADE;"
 
 # Connect to postgres instead of DB_NAME since we can't drop
 # the database we're connected to
