@@ -11,6 +11,7 @@ if [ -f "$ENV" ]; then
 fi
 
 export PGPASSWORD
+export PGOPTIONS='-c on_error_stop=on'
 
 DUMP_FILE="dump-postgres.sql"
 # DUMP_FILE="minidump.sql"
@@ -52,12 +53,15 @@ if [ -z $DB_NAME ]; then
 fi
 
 echo "Preparing database..."
-echo "DROP SCHEMA IF EXISTS etherpad CASCADE; \
+PREP_SQL="DROP SCHEMA IF EXISTS $DB_NAME CASCADE; \
 DROP TABLE IF EXISTS store CASCADE; \
 CREATE ROLE etherpad; \
 GRANT ALL ON SCHEMA public TO etherpad; \
-GRANT etherpad TO $DB_USER;" | \
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME
+GRANT etherpad TO $DB_USER;"
+
+# Connect to postgres instead of DB_NAME since we can't drop
+# the database we're connected to
+echo "$PREP_SQL" | psql -h $DB_HOST -U $DB_USER -d postgres
 
 echo "Restoring database from dump file..."
 if file $DUMP_FILE | grep -q "PostgreSQL custom database dump"; then
