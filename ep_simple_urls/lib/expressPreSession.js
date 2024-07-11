@@ -7,14 +7,12 @@ const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
 
-const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
-
-const getMatchingDomain = (url) => {
+const getRedirect = (path) => {
   let target;
   let statusCode = 301;
 
   for (const rewrite of rewrites) {
-    if (url.match(rewrite.regex)) {
+    if (path.match(rewrite.regex)) {
       target = rewrite.replace;
 
       if (rewrite.permanent) {
@@ -55,6 +53,8 @@ const renderPad = async (pad) => {
 };
 
 const expressPreSession = async (hookName, args) => {
+  const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
+
   args.app.get("/", async (req, res) => {
     let padName;
 
@@ -92,7 +92,8 @@ const expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
-    const { target, statusCode } = getMatchingDomain(req.url);
+    const path = new URL(req.url, `http://${req.hostname}`).pathname;
+    const { target, statusCode } = getRedirect(path);
 
     if (target) {
       return res.redirect(statusCode, target);
@@ -105,7 +106,7 @@ const expressPreSession = async (hookName, args) => {
     const { pad } = req.params;
     const { public: forcePublic } = req.query;
     const shouldShowEditor =
-      req.hostname === secretDomain || forcePublic !== "true";
+      req.hostname === secretDomain && forcePublic !== "true";
 
     if (shouldShowEditor) {
       next();

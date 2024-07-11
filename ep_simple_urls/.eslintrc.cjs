@@ -10,4 +10,12 @@ module.exports = {
   env: {
     "jest/globals": true,
   },
+  overrides: [
+    {
+      files: ["*.spec.js"],
+      rules: {
+        "n/no-unpublished-require": "off",
+      },
+    },
+  ],
 };
