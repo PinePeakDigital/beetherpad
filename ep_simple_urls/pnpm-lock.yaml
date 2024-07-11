@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      cheerio:
+        specifier: 1.0.0-rc.12
+        version: 1.0.0-rc.12
       expost:
         specifier: bsoule/expost
         version: https://codeload.github.com/bsoule/expost/tar.gz/ae311b87d5a6a28032971873f719ccaeaf09373a
