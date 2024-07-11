@@ -72,10 +72,10 @@ const expressPreSession = async (hookName, args) => {
 
   args.app.use((req, res, next) => {
     const path = new URL(req.url, `http://${req.hostname}`).pathname;
-    const { target, statusCode } = getRedirect(path);
+    const r = getRedirect(path);
 
-    if (target) {
-      return res.redirect(statusCode, target);
+    if (r) {
+      return res.redirect(r.statusCode, r.target);
     }
 
     next();

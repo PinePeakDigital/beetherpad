@@ -20,6 +20,10 @@ const getRedirect = (path) => {
     }
   }
 
+  if (!target) {
+    return null;
+  }
+
   return { target, statusCode };
 };
 
