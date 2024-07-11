@@ -16,6 +16,7 @@ describe("shouldRewriteUrl", () => {
     ["/foo/timeslider", true],
     ["/foo?public=true", true],
     ["/p/foo?public=true", false],
+    ["/api/404", false],
   ])("shouldRewriteUrl(%s) -> %s", (url, expected) => {
     expect(shouldRewriteUrl(url)).toBe(expected);
   });

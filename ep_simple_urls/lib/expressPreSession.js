@@ -1,32 +1,11 @@
 "use strict";
 
-const rewrites = require("../rewrites.json");
 const { shouldRewriteUrl } = require("./shouldRewriteUrl");
 const cheerio = require("cheerio");
 const API = require("ep_etherpad-lite/node/db/API");
 const expost = require("expost");
 const eejs = require("ep_etherpad-lite/node/eejs");
-
-const getRedirect = (path) => {
-  let target;
-  let statusCode = 301;
-
-  for (const rewrite of rewrites) {
-    if (path.match(rewrite.regex)) {
-      target = rewrite.replace;
-
-      if (rewrite.permanent) {
-        statusCode = 302;
-      }
-
-      if (rewrite.last) {
-        break;
-      }
-    }
-  }
-
-  return { target, statusCode };
-};
+const { getRedirect } = require("./getRedirect");
 
 const renderPad = async (pad) => {
   const { text } = await API.getText(pad);
@@ -93,10 +72,10 @@ const expressPreSession = async (hookName, args) => {
 
   args.app.use((req, res, next) => {
     const path = new URL(req.url, `http://${req.hostname}`).pathname;
-    const { target, statusCode } = getRedirect(path);
+    const r = getRedirect(path);
 
-    if (target) {
-      return res.redirect(statusCode, target);
+    if (r) {
+      return res.redirect(r.statusCode, r.target);
     }
 
     next();
