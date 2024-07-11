@@ -4,21 +4,22 @@ const { shouldRewriteUrl } = require("./shouldRewriteUrl");
 
 describe("shouldRewriteUrl", () => {
   it.each([
-    ["/p/foo", false],
-    ["/foo", true],
+    ["/admin-auth", false],
     ["/admin", false],
+    ["/api/404", false],
+    ["/foo?public=true", true],
+    ["/foo", true],
     ["/foo/export/txt", true],
+    ["/foo/timeslider", true],
+    ["/health", false],
+    ["/p/foo?public=true", false],
+    ["/p/foo", false],
+    ["/p/foo/export/txt", false],
+    ["/p/foo/timeslider", false],
+    ["/post", false],
     ["/static/empty.html", false],
     ["foo.bar", false],
-    ["/admin-auth", false],
-    ["/health", false],
-    ["/post", false],
-    ["/foo/timeslider", true],
-    ["/foo?public=true", true],
-    ["/p/foo?public=true", false],
-    ["/api/404", false],
-    ["/p/foo/timeslider", false],
-  ])("shouldRewriteUrl(%s) -> %s", (url, expected) => {
-    expect(shouldRewriteUrl(url)).toBe(expected);
+  ])("shouldRewriteUrl(%s) -> %s", (path, expected) => {
+    expect(shouldRewriteUrl(path)).toBe(expected);
   });
 });
