@@ -6,9 +6,10 @@ const shouldRewriteUrl = (path) => {
   const whitelist1 = ["export"];
 
   if (whitelist1.includes(segments[1])) return true;
-  if (segments.length > 2) return false;
   if (blacklist0.includes(segments[0])) return false;
+  if (segments.length > 2) return false;
   if (path.includes(".")) return false;
+  if (path === "/api/404") return false;
 
   return true;
 };

@@ -48,4 +48,14 @@ describe("expressPreSession", () => {
 
     expect(expost.parseMarkdown).toHaveBeenCalled();
   });
+
+  it("does not redirect /api/404", async () => {
+    expressPreSession(undefined, {
+      app,
+    });
+
+    const res = await request(app).get("/api/404");
+
+    expect(res.status).toBe(404);
+  });
 });
