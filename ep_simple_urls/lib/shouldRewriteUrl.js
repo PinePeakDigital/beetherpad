@@ -1,22 +1,16 @@
 "use strict";
 
-const shouldRewriteUrl = (url) => {
-  // We don't want to redirect any of the static pad resources
-  // (JavaScript, CSS, etc). This regexp matches "/foo" and "/foo/",
-  // but not "/foo/bar" or "/foo.bar".
-  const postPathRegexp = /^[/][^/.]+[/]?$/;
-  const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
-  const operationPathRegexp = new RegExp(
-    `^${postPathRegexp}[/](export|timeslider)[/]?[^/]*`
-  );
-  const padRegexp = /^\/p\//;
+const shouldRewriteUrl = (path) => {
+  const segments = path.split("/").filter(Boolean);
+  const blacklist0 = ["admin", "admin-auth", "health", "post", "static", "p"];
+  const whitelist1 = ["export"];
 
-  const accept = [postPathRegexp, operationPathRegexp];
-  const reject = [postAdminRegexp, padRegexp];
+  if (whitelist1.includes(segments[1])) return true;
+  if (segments.length > 2) return false;
+  if (blacklist0.includes(segments[0])) return false;
+  if (path.includes(".")) return false;
 
-  return (
-    !reject.find((rgx) => rgx.test(url)) && accept.find((rgx) => rgx.test(url))
-  );
+  return true;
 };
 
 module.exports = {
