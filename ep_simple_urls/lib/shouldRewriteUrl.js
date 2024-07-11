@@ -6,24 +6,17 @@ const shouldRewriteUrl = (url) => {
   // but not "/foo/bar" or "/foo.bar".
   const postPathRegexp = /^[/][^/.]+[/]?$/;
   const postAdminRegexp = /^[/](admin|admin-auth|health|post)[/]?$/;
-  const operationPathRegexp = /^[/][^/.]+[/]?\/(export|timeslider)\/?[^/]*/;
-  // /something/export/txt
-  //
+  const operationPathRegexp = new RegExp(
+    `^${postPathRegexp}[/](export|timeslider)[/]?[^/]*`
+  );
+  const padRegexp = /^\/p\//;
 
-  const isPost = postPathRegexp.test(url);
-  const isAdmin = postAdminRegexp.test(url);
-  const isOp = operationPathRegexp.test(url);
+  const accept = [postPathRegexp, operationPathRegexp];
+  const reject = [postAdminRegexp, padRegexp];
 
-  if (
-    (isPost || isOp) &&
-    !url.startsWith("/p/") &&
-    !url.startsWith("/static/") &&
-    !isAdmin
-  ) {
-    return true;
-  }
-
-  return false;
+  return (
+    !reject.find((rgx) => rgx.test(url)) && accept.find((rgx) => rgx.test(url))
+  );
 };
 
 module.exports = {
