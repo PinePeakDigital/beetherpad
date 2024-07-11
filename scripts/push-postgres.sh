@@ -11,7 +11,6 @@ if [ -f "$ENV" ]; then
 fi
 
 export PGPASSWORD
-export PGOPTIONS='-c on_error_stop=on'
 
 DUMP_FILE="dump-postgres.sql"
 # DUMP_FILE="minidump.sql"
@@ -54,11 +53,12 @@ fi
 
 echo "Preparing database..."
 PREP_SQL="DROP SCHEMA IF EXISTS $DB_NAME CASCADE; \
+DROP SCHEMA IF EXISTS etherpad CASCADE; \
 DROP TABLE IF EXISTS store CASCADE;"
 
 # Connect to postgres instead of DB_NAME since we can't drop
 # the database we're connected to
-echo "$PREP_SQL" | psql -h $DB_HOST -U $DB_USER -d postgres
+echo "$PREP_SQL" | psql -v ON_ERROR_STOP=1 -h $DB_HOST -U $DB_USER -d postgres
 
 echo "Restoring database from dump file..."
 if file $DUMP_FILE | grep -q "PostgreSQL custom database dump"; then
@@ -68,7 +68,11 @@ if file $DUMP_FILE | grep -q "PostgreSQL custom database dump"; then
 else
         # Use psql for plain-text files
         echo "Using psql..."
-        psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f $DUMP_FILE
+        psql -v ON_ERROR_STOP=1 -h $DB_HOST -U $DB_USER -d $DB_NAME -f $DUMP_FILE
 fi
+
+echo "Renaming schema..."
+POST_SQL="ALTER SCHEMA etherpad RENAME TO $DB_NAME;"
+echo "$POST_SQL" | psql -v ON_ERROR_STOP=1 -h $DB_HOST -U $DB_USER -d $DB_NAME
 
 echo "Done"
