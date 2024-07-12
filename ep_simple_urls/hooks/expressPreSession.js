@@ -1,8 +1,8 @@
 "use strict";
 
-const { shouldRewriteUrl } = require("./shouldRewriteUrl");
-const { getRedirect } = require("./getRedirect");
-const { renderPad } = require("./renderPad");
+const { shouldRewriteUrl } = require("../lib/shouldRewriteUrl");
+const { getRedirect } = require("../lib/getRedirect");
+const { renderPad } = require("../lib/renderPad");
 
 const expressPreSession = async (hookName, args) => {
   const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;

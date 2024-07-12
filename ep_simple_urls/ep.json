@@ -5,6 +5,7 @@
       "hooks": {
         "expressPreSession": "ep_simple_urls/hooks.server:expressPreSession",
         "socketio": "ep_simple_urls/hooks.server:socketio",
+        "eejsBlock_editbarMenuLeft": "ep_simple_urls/hooks.server:eejsBlock_editbarMenuLeft",
         "eejsBlock_editbarMenuRight": "ep_simple_urls/hooks.server:eejsBlock_editbarMenuRight"
       }
     }
