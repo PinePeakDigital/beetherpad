@@ -253,7 +253,7 @@
     "return": "${PAD_SHORTCUTS_ENABLED_RETURN:true}",
     "esc": "${PAD_SHORTCUTS_ENABLED_ESC:true}" /* in mozilla versions 14-19 avoid reconnecting pad */,
     "cmdS": "${PAD_SHORTCUTS_ENABLED_CMD_S:true}" /* save a revision */,
-    "tab": "${PAD_SHORTCUTS_ENABLED_TAB:false}" /* indent */,
+    "tab": "${PAD_SHORTCUTS_ENABLED_TAB:true}" /* indent */,
     "cmdZ": "${PAD_SHORTCUTS_ENABLED_CMD_Z:true}" /* undo/redo */,
     "cmdY": "${PAD_SHORTCUTS_ENABLED_CMD_Y:true}" /* redo */,
     "cmdI": "${PAD_SHORTCUTS_ENABLED_CMD_I:false}" /* italic */,
