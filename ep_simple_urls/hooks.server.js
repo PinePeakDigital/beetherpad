@@ -5,7 +5,7 @@ const toolbar = require("ep_etherpad-lite/node/utils/toolbar");
 const settings = require("ep_etherpad-lite/node/utils/Settings");
 const webaccess = require("ep_etherpad-lite/node/hooks/express/webaccess");
 
-const { expressPreSession } = require("./lib/expressPreSession");
+const { expressPreSession } = require("./hooks/expressPreSession");
 
 const secretDomain = process.env.ETHERPAD_SECRET_DOMAIN;
 
