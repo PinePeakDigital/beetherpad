@@ -3,8 +3,12 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ENV="$DIR/.env"
 if [ -f "$ENV" ]; then
-  export $(cat $ENV | xargs)
+  source $ENV
 fi
+
+export PGHOST
+export PGUSER
+export PGPASSWORD
 
 DEV_ENV=${DEV_ENV:-false}
 DB_PORT="${DB_PORT:-5432}"
