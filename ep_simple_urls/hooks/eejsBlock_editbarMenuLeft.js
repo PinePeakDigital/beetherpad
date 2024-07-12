@@ -12,6 +12,7 @@ const eejsBlock_editbarMenuLeft = (hookName, context, cb) => {
   $('[data-key="insertunorderedlist"]').remove();
   $('[data-key="indent"]').remove();
   $('[data-key="outdent"]').remove();
+  $("li.separator + li.separator").remove();
 
   context.content = $.html();
 
