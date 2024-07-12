@@ -383,7 +383,7 @@
      * significant usability drawbacks vs. "Lax". See
      * https://stackoverflow.com/q/41841880 for discussion.
      */
-    "sameSite": "${COOKIE_SAME_SITE:Lax}",
+    "sameSite": "${COOKIE_SAME_SITE:None}",
 
     /*
      * How long (in milliseconds) after navigating away from Etherpad before the
