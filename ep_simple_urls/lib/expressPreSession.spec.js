@@ -72,4 +72,18 @@ describe("expressPreSession", () => {
 
     expect(res.status).toBe(200);
   });
+
+  it("does not redirect timeslider with time tag", async () => {
+    expressPreSession(undefined, {
+      app,
+    });
+
+    app.get("/p/:pad/timeslider", (req, res) => {
+      res.status(200).send("ok");
+    });
+
+    const res = await request(app).get("/p/foo/timeslider#123");
+
+    expect(res.status).toBe(200);
+  });
 });
