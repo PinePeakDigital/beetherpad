@@ -23,7 +23,6 @@ DB_HOST="${DB_HOST:-$DOCKER_POSTGRES_NAME}"
 ETHERPAD_VERSION='bc1032a9d00caae8f34d6cfc11c8733c21fff0f1'
 ETHERPAD_PLUGINS="\
 ep_author_hover \
-ep_pad_activity_nofication_in_title \
 ep_prompt_for_name \
 ep_sync_status"
 ETHERPAD_LOCAL_PLUGINS="ep_simple_urls ep_post_data"
