@@ -25,7 +25,10 @@ ETHERPAD_PLUGINS="\
 ep_author_hover \
 ep_prompt_for_name \
 ep_sync_status"
-ETHERPAD_LOCAL_PLUGINS="ep_simple_urls ep_post_data"
+ETHERPAD_LOCAL_PLUGINS="\
+ep_simple_urls \
+ep_post_data \
+ep_pad_activity_nofication_in_title"
 
 # Repo Setup
 etherpad_path="$CACHE_DIR/etherpad-lite"

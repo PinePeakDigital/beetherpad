@@ -2,3 +2,6 @@
 	path = ep_post_data
 	url = https://github.com/jakecoble/ep_post_data
 	branch = fix-require
+[submodule "ep_pad_activity_nofication_in_title"]
+	path = ep_pad_activity_nofication_in_title
+	url = https://github.com/jakecoble/ep_pad_activity_nofication_in_title
