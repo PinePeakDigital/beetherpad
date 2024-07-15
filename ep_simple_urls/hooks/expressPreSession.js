@@ -44,7 +44,7 @@ const expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
-    const path = new URL(req.url, `http://${req.hostname}`).pathname;
+    const path = req.path;
     const r = getRedirect(path);
 
     if (r && req.hostname !== secretDomain) {
