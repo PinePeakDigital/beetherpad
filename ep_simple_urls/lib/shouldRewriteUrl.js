@@ -1,11 +1,21 @@
 "use strict";
 
+const blacklist = [
+  "admin",
+  "admin-auth",
+  "health",
+  "post",
+  "static",
+  "p",
+  "javascripts",
+  "pluginfw",
+];
+
 const shouldRewriteUrl = (path) => {
   const segments = path.split("/").filter(Boolean);
-  const blacklist0 = ["admin", "admin-auth", "health", "post", "static", "p"];
 
   if (path.startsWith("/p/")) return false;
-  if (blacklist0.includes(segments[0])) return false;
+  if (blacklist.includes(segments[0])) return false;
   if (path.includes(".")) return false;
 
   if (segments.length === 1) return true;
@@ -16,6 +26,13 @@ const shouldRewriteUrl = (path) => {
   return false;
 };
 
+const should404Url = (path) => {
+  const segments = path.split("/").filter(Boolean);
+
+  return !blacklist.includes(segments[0]);
+};
+
 module.exports = {
   shouldRewriteUrl,
+  should404Url,
 };

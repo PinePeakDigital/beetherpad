@@ -1,6 +1,6 @@
 "use strict";
 
-const { shouldRewriteUrl } = require("../lib/shouldRewriteUrl");
+const { shouldRewriteUrl, should404Url } = require("../lib/shouldRewriteUrl");
 const { getRedirect } = require("../lib/getRedirect");
 const { renderPad } = require("../lib/renderPad");
 
@@ -38,6 +38,16 @@ const expressPreSession = async (hookName, args) => {
 
     if (shouldRewrite) {
       req.url = `/p${req.url}`;
+    }
+
+    next();
+  });
+
+  args.app.use((req, res, next) => {
+    const should404 = should404Url(req.url);
+
+    if (should404) {
+      req.url = "/api/404";
     }
 
     next();
