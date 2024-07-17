@@ -70,13 +70,13 @@ exports.socketio = (hookName, args, callback) => {
 
     socket.on("saveSettings", async (newSettings) => {
       console.log(
-        "Admin request to save settings through a socket on /admin/settings"
+        "Admin request to save settings through a socket on /admin/settings",
       );
     });
 
     socket.on("restartServer", async () => {
       console.log(
-        "Admin request to restart server through a socket on /admin/settings"
+        "Admin request to restart server through a socket on /admin/settings",
       );
     });
   });
@@ -95,7 +95,13 @@ exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
 
   context.content = eejs.require(
     "ep_simple_urls/templates/expost_button.html",
-    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly }
+    { url: `expost.${secretDomain}${path}`, toolbar, settings, isReadOnly },
   );
+  return cb();
+};
+
+exports.eejsBlock_styles = (hookName, args, cb) => {
+  args.content +=
+    "<link href='../static/plugins/ep_simple_urls/static/css/ep_simple_urls.css' rel='stylesheet'>";
   return cb();
 };
