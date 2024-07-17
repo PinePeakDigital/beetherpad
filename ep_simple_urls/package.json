@@ -28,7 +28,7 @@
     "express": ">=4.19.2"
   },
   "dependencies": {
-    "expost": "bsoule/expost",
+    "expost": "bsoule/expost#9d8e5556697a0a33938e12d356fd8c77af2a9086",
     "cheerio": "1.0.0-rc.12"
   },
   "devDependencies": {
