@@ -7,8 +7,10 @@ const getRedirect = (path) => {
   let statusCode = 301;
 
   for (const rewrite of rewrites) {
-    if (path.match(rewrite.regex)) {
-      target = rewrite.replace;
+    const regex = new RegExp(rewrite.regex);
+
+    if (path.match(regex)) {
+      target = path.replace(regex, rewrite.replace);
 
       if (rewrite.permanent) {
         statusCode = 302;
