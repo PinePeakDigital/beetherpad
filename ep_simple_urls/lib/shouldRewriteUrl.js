@@ -29,7 +29,10 @@ const shouldRewriteUrl = (path) => {
 const should404Url = (path) => {
   const segments = path.split("/").filter(Boolean);
 
-  return !blacklist.includes(segments[0]);
+  return (
+    !blacklist.includes(segments[0]) &&
+    !path.match(/^\/padbootstrap-[a-zA-Z0-9]{11}\.min\.js/)
+  );
 };
 
 module.exports = {

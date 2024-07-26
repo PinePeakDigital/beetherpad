@@ -19,6 +19,7 @@ describe("shouldRewriteUrl", () => {
     ["/post", false],
     ["/static/empty.html", false],
     ["foo.bar", false],
+    ["/padbootstrap-Q6fYoUZ82Zk.min.js", false],
   ])("shouldRewriteUrl(%s) -> %s", (path, expected) => {
     expect(shouldRewriteUrl(path)).toBe(expected);
   });
@@ -43,6 +44,7 @@ describe("should404Url", () => {
     ["/foo/bar", true],
     ["/javascripts/lib/ep_etherpad-lite/static/js/rjquery", false],
     ["/pluginfw/plugin-definitions.json", false],
+    ["/padbootstrap-Q6fYoUZ82Zk.min.js", false],
   ])("should404Url(%s) -> %s", (path, expected) => {
     expect(should404Url(path)).toBe(expected);
   });
