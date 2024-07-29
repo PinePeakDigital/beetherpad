@@ -1,6 +1,6 @@
 "use strict";
 
-const { shouldRewriteUrl } = require("../lib/shouldRewriteUrl");
+const { shouldRewriteUrl, should404Url } = require("../lib/shouldRewriteUrl");
 const { getRedirect } = require("../lib/getRedirect");
 const { renderPad } = require("../lib/renderPad");
 
@@ -44,7 +44,17 @@ const expressPreSession = async (hookName, args) => {
   });
 
   args.app.use((req, res, next) => {
-    const path = new URL(req.url, `http://${req.hostname}`).pathname;
+    const should404 = should404Url(req.url);
+
+    if (should404) {
+      req.url = "/api/404";
+    }
+
+    next();
+  });
+
+  args.app.use((req, res, next) => {
+    const path = req.path;
     const r = getRedirect(path);
 
     if (r && req.hostname !== secretDomain) {

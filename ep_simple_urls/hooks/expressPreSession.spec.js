@@ -86,4 +86,18 @@ describe("expressPreSession", () => {
 
     expect(res.status).toBe(200);
   });
+
+  it("shows 404 page for non-existent subpaths like /foo/bar", async () => {
+    expressPreSession(undefined, {
+      app,
+    });
+
+    app.get("/foo/bar", (req, res) => {
+      res.status(200).send("ok");
+    });
+
+    const res = await request(app).get("/foo/bar");
+
+    expect(res.status).toBe(404);
+  });
 });

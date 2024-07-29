@@ -89,7 +89,7 @@ exports.eejsBlock_editbarMenuLeft = eejsBlock_editbarMenuLeft;
 exports.eejsBlock_editbarMenuRight = (hookName, context, cb) => {
   const { renderContext } = context;
   const { req } = renderContext;
-  const path = req.url;
+  const path = req.url.slice(2); // Remove /p
 
   const isReadOnly = !webaccess.userCanModify(req.params.pad, req);
 
