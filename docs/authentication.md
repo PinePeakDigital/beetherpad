@@ -13,7 +13,6 @@
 
 ## Configuration
 
-- Admin credentials set in settings.json
 - Authentication routes must be excluded from URL rewriting
 - Both admin and admin-auth paths must be properly handled
 
