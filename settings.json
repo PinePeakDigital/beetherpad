@@ -349,7 +349,7 @@
    * The other effect will be that the logs will contain the real client's IP,
    * instead of the reverse proxy's IP.
    */
-  "trustProxy": "${TRUST_PROXY:false}",
+  "trustProxy": "${TRUST_PROXY:true}",
 
   /*
    * Settings controlling the session cookie issued by Etherpad.
@@ -383,7 +383,7 @@
      * significant usability drawbacks vs. "Lax". See
      * https://stackoverflow.com/q/41841880 for discussion.
      */
-    "sameSite": "${COOKIE_SAME_SITE:None}",
+    "sameSite": "${COOKIE_SAME_SITE:Lax}",
 
     /*
      * How long (in milliseconds) after navigating away from Etherpad before the
