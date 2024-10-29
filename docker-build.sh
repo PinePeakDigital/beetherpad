@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ENV="$DIR/.env"
 if [ -f "$ENV" ]; then
-  export $(cat $ENV | xargs)
+  export $(cat $ENV | grep -v '^#' | xargs)
 fi
 
 CACHE_DIR=${CACHE_DIR:=$HOME/.cache}
