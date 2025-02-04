@@ -60,7 +60,6 @@ if [ "$DEV_ENV" = "true" ]; then
     # Run containers
     docker run \
         --name $DOCKER_POSTGRES_NAME \
-        --restart always \
         --detach \
         --network=$DOCKER_NETWORK_NAME \
         --env POSTGRES_DB="${DB_NAME}" \
@@ -92,7 +91,6 @@ docker_run() {
     fi
 
     docker run --name $DOCKER_CONTAINER_NAME \
-        --restart always \
         --detach \
         --env DB_TYPE=postgres \
         --env DB_HOST="${DB_HOST}" \
