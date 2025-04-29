@@ -13,7 +13,7 @@ cp .env.example .env # edit .env as needed
 echo "127.0.0.1 secretdomain" | sudo tee -a /etc/hosts
 
 # Install dependencies
-pnpm install
+cd ./ep_simple_urls && pnpm install
 ```
 
 ## Local Development
